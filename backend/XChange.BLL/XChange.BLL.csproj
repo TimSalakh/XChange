@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DAL\XChange.DAL.csproj" />
+	  <ProjectReference Include="..\XChange.DAL\XChange.DAL.csproj" />
   </ItemGroup>
 
   <ItemGroup>
