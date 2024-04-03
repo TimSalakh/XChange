@@ -26,9 +26,14 @@ public class LetterRepository : ILetterRepository
         await _context.SaveChangesAsync();
     }
 
-    public IQueryable<Letter> GetAll()
+    public async Task<IQueryable<Letter>> GetAllAsync()
     {
-        return _context.Letter.AsQueryable();
+        return await Task.Run(() =>
+        {
+            return _context.Letter
+            .AsQueryable()
+            .AsNoTracking();
+        });
     }
 
     public async Task<Letter?> GetByIdAsync(Guid id)

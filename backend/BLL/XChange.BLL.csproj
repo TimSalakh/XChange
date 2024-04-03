@@ -7,11 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DAL\DAL.csproj" />
+    <ProjectReference Include="..\DAL\XChange.DAL.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Mappers\" />
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
-
 </Project>

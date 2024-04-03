@@ -1,8 +1,10 @@
-﻿using BLL.DTOs;
-using BLL.Interfaces;
+﻿using BLL.Interfaces;
 using DAL.Models;
 using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
+using XChange.BLL.DTOs.UserDTOs;
+using XChange.BLL.Mappers;
+using XChange.DAL.Repositories.Interfaces;
 
 namespace BLL.Services;
 
@@ -10,36 +12,69 @@ public class UserService : IUserService
 {
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
+    private readonly IUserRepository _userRepository;
 
     public UserService(
         UserManager<User> userManager, 
-        SignInManager<User> signInManager)
+        SignInManager<User> signInManager,
+        IUserRepository userRepository)
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _userRepository = userRepository;
     }
 
-    public async Task<bool> DeleteAsync(Guid id)
+    public async Task<(Guid, string)> RegisterAsync(RegisterUserDto userRegisterDto)
     {
-        var user = await _userManager.FindByIdAsync(id.ToString());
-        if (user == null)
-            return false;
-        await _userManager.DeleteAsync(user);
-        return true;
+        var userToRegister = userRegisterDto.ToUserTable();
+        var result = await _userManager
+            .CreateAsync(userToRegister, userRegisterDto.Password);
+
+        if (!result.Succeeded)
+            return (Guid.Empty, "Invalid values.");
+
+        var user = await _userManager.FindByEmailAsync(userRegisterDto.Email);
+        return (user!.Id, string.Empty);
     }
 
-    public Task EditAsync(UserEditDto userEditDto)
+    public async Task<(Guid, string)> LoginAsync(LoginUserDto userLoginDto)
     {
-        throw new NotImplementedException();
+        var targetUser = await _userManager.Users
+            .FirstOrDefaultAsync(u => u.Email == userLoginDto.Email);
+        if (targetUser == null) 
+            return (Guid.Empty, "Invalid email/password.");
+
+        var result = await _signInManager
+            .CheckPasswordSignInAsync(targetUser, userLoginDto.Password, false);
+        if (!result.Succeeded) 
+            return (Guid.Empty, "Invalid email/password.");
+
+        return (targetUser.Id, string.Empty);
     }
 
-    public Task LoginAsync(UserLoginDto userLoginDto)
+    public async Task<(bool, string)> EditAsync(Guid id, EditUserDto userEditDto)
     {
-        throw new NotImplementedException();
+        var targetUser = await _userManager.FindByIdAsync(id.ToString());
+        if (targetUser == null)
+            return (false, "Invalid user id.");
+
+        await _userManager.UpdateAsync(userEditDto.ToUserTable(targetUser));
+        return (true, string.Empty);
     }
 
-    public Task RegisterAsync(UserRegisterDto userRegisterDto)
+    public async Task<(bool, string)> RemoveAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var targetUser = await _userManager.FindByIdAsync(id.ToString());
+        if (targetUser == null)
+            return (false, "Invalid user id.");
+        
+        await _userManager.DeleteAsync(targetUser);
+        return (true, string.Empty);
+    }
+
+    public async Task<IEnumerable<DisplayUserDto>> GetAllAsync()
+    {
+        var totalUsers = await _userRepository.GetAllAsync();
+        return totalUsers.Select(u => u.ToDisplayUserDto());
     }
 }

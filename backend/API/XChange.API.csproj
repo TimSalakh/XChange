@@ -22,8 +22,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BLL\BLL.csproj" />
-    <ProjectReference Include="..\DAL\DAL.csproj" />
+    <ProjectReference Include="..\BLL\XChange.BLL.csproj" />
+    <ProjectReference Include="..\DAL\XChange.DAL.csproj" />
   </ItemGroup>
 
 </Project>

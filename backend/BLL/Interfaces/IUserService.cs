@@ -1,12 +1,12 @@
-﻿using BLL.DTOs;
-using System.ComponentModel.DataAnnotations;
+﻿using XChange.BLL.DTOs.UserDTOs;
 
 namespace BLL.Interfaces;
 
 public interface IUserService
 {
-    Task<Guid> RegisterAsync(UserRegisterDto userRegisterDto);
-    Task<Guid> LoginAsync(UserLoginDto userLoginDto);
-    Task<bool> EditAsync(UserEditDto userEditDto);
-    Task<bool> DeleteAsync(Guid id);
+    Task<(Guid, string)> RegisterAsync(RegisterUserDto registerUserDto);
+    Task<(Guid, string)> LoginAsync(LoginUserDto loginUserDto);
+    Task<(bool, string)> EditAsync(Guid id, EditUserDto editUserDto);
+    Task<(bool, string)> RemoveAsync(Guid id);
+    Task<IEnumerable<DisplayUserDto>> GetAllAsync(); // FOR ADMIN USAGE ONLY
 }
