@@ -1,4 +1,4 @@
-﻿using API.DAL.Models;
+﻿using API.DAL.Entites;
 using API.BLL.DTOs.UserDTOs;
 
 namespace API.BLL.Mappers;

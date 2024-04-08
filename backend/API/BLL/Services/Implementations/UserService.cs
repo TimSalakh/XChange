@@ -1,4 +1,4 @@
-﻿using API.DAL.Models;
+﻿using API.DAL.Entites;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using API.BLL.DTOs.UserDTOs;
@@ -31,8 +31,9 @@ public class UserService : IUserService
 
         if (!result.Succeeded)
             return string.Empty;
-
-        return _tokenService.GetToken(userToRegister.Email!);
+        var registeredUser = await _userManager
+            .FindByEmailAsync(userToRegister.Email!);
+        return _tokenService.GetToken(registeredUser!.Id, userToRegister.Email!);
     }
 
     public async Task<string> LoginAsync(LoginUserDto userLoginDto)
@@ -47,7 +48,7 @@ public class UserService : IUserService
         if (!result.Succeeded)
             return string.Empty;
 
-        return _tokenService.GetToken(targetUser.Email!);
+        return _tokenService.GetToken(targetUser.Id, targetUser.Email!);
     }
 
     public async Task EditAsync(Guid id, EditUserDto userEditDto)

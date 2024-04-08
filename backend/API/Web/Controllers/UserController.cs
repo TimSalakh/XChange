@@ -62,4 +62,8 @@ public class UserController : Controller
         await _userService.RemoveAsync(id);
         return Ok("User successfully deleted.");
     }
+
+    [Authorize]
+    [HttpGet("secret")]
+    public string Secret() => "SUCK MY LEG!";
 }

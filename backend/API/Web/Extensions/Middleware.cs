@@ -1,26 +1,27 @@
 ﻿using API.BLL.Services.Implementations;
 using API.BLL.Services.Interfaces;
 using API.DAL.Contexts;
-using API.DAL.Models;
+using API.DAL.Entites;
 using API.DAL.Repositories.Implementations;
 using API.DAL.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Text;
 
 namespace API.Web.Extensions;
 
 public static class Middleware
 {
-    public static void ApplyIdentity(this IServiceCollection services)
+    public static void ApplyIdentity(this WebApplicationBuilder builder)
     {
-        services.AddIdentity<User, Role>(options =>
+        builder.Services.AddIdentity<User, Role>(options =>
         {
             options.User.RequireUniqueEmail = true;
-            //options.Password.RequireNonAlphanumeric = true;
-            //options.Password.RequireDigit = true;
-            //options.Password.RequireLowercase = true;
-            //options.Password.RequireUppercase = true;
+            options.Password.RequireNonAlphanumeric = false;
+            options.Password.RequireDigit = false;
+            options.Password.RequireLowercase = false;
+            options.Password.RequireUppercase = false;
             options.Password.RequiredLength = 12;
         }).AddEntityFrameworkStores<XChangeDbContext>();
     }
@@ -46,34 +47,34 @@ public static class Middleware
             };
         });
 
-        //builder.Services.AddSwaggerGen(option =>
-        //{
-        //    option.SwaggerDoc("v1", new OpenApiInfo { Version = "v1" });
-        //    option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-        //    {
-        //        In = ParameterLocation.Header,
-        //        Description = "Please enter a valid token",
-        //        Name = "Authorization",
-        //        Type = SecuritySchemeType.Http,
-        //        BearerFormat = "JWT",
-        //        Scheme = "Bearer"
-        //    });
-        //    option.AddSecurityRequirement(new OpenApiSecurityRequirement
-        //    {
-        //        {
-        //            new OpenApiSecurityScheme
-        //            {
-        //                Reference = new OpenApiReference
-        //                {
-        //                    Type = ReferenceType.SecurityScheme,
-        //                    Id = "Bearer"
-        //                }
-        //            },
-        //            new string[]{}
-        //        }
-        //    });
-        //});
-    }
+        builder.Services.AddSwaggerGen(option =>
+        {
+            option.SwaggerDoc("v1", new OpenApiInfo { Version = "v1" });
+            option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                In = ParameterLocation.Header,
+                Description = "Please enter a valid token",
+                Name = "Authorization",
+                Type = SecuritySchemeType.Http,
+                BearerFormat = "JWT",
+                Scheme = "Bearer"
+            });
+            option.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    new string[]{}
+                }
+            });
+            });
+        }
 
     public static void ApplyDI(this WebApplicationBuilder builder)
     {

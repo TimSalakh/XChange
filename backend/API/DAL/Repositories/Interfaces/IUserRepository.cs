@@ -1,4 +1,4 @@
-﻿using API.DAL.Models;
+﻿using API.DAL.Entites;
 
 namespace API.DAL.Repositories.Interfaces;
 

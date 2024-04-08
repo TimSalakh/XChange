@@ -15,10 +15,11 @@ public class TokenService : ITokenService
         _configuration = configuration;
     }
 
-    public string GetToken(string email)
+    public string GetToken(Guid id, string email)
     {
         var claims = new List<Claim>
         {
+            new Claim(ClaimTypes.Name, id.ToString()),
             new Claim(ClaimTypes.Email, email)
         };
 
@@ -31,7 +32,7 @@ public class TokenService : ITokenService
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
-            Expires = DateTime.Now.AddHours(1),
+            Expires = DateTime.Now.AddMinutes(1),
             SigningCredentials = singningCreds,
             Issuer = _configuration.GetSection("Jwt:Issuer").Value!,
             Audience = _configuration.GetSection("Jwt:Audience").Value!

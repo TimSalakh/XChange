@@ -1,5 +1,5 @@
 ﻿using API.DAL.Contexts;
-using API.DAL.Models;
+using API.DAL.Entites;
 using Microsoft.EntityFrameworkCore;
 using API.DAL.Repositories.Interfaces;
 

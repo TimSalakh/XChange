@@ -1,5 +1,5 @@
 ﻿using API.DAL.Configurations;
-using API.DAL.Models;
+using API.DAL.Entites;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

@@ -1,4 +1,4 @@
-﻿using API.DAL.Models;
+﻿using API.DAL.Entites;
 using API.DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using API.BLL.DTOs.LetterDTOs;

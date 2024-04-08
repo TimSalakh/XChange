@@ -1,4 +1,4 @@
-﻿using API.DAL.Models;
+﻿using API.DAL.Entites;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

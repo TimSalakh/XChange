@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace API.DAL.Models;
+namespace API.DAL.Entites;
 
 public class Role : IdentityRole<Guid>
 { }
