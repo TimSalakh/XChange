@@ -1,4 +1,4 @@
-export interface RegisterModel {
+export interface RegisterFormInput {
   name: string
   surname: string
   age: number
@@ -6,7 +6,7 @@ export interface RegisterModel {
   password: string
 }
 
-export interface LoginModel {
+export interface LoginFormInput {
   email: string
   password: string
 }
