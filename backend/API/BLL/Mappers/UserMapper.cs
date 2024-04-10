@@ -18,18 +18,6 @@ public static class UserMapper
         };
     }
 
-    public static User ToUserTable(this EditUserDto editUserDto, User user)
-    {
-        user.Name = editUserDto.Name;
-        user.Surname = editUserDto.Surname;
-        user.Age = editUserDto.Age;
-        user.Country = editUserDto.Country;
-        user.City = editUserDto.City;   
-        user.Bio = editUserDto.Bio;
-
-        return user;
-    }
-
     public static DisplayUserDto ToDisplayUserDto(this User user)
     {
         return new DisplayUserDto

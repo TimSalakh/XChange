@@ -1,22 +1,22 @@
-import { UserProfile } from '../models/user'
-import { LoginFormInput, RegisterFormInput } from '../models/formInputs'
+import { UserToStore } from '../models/UserModels'
+import { LoginFormInputs, RegisterFormInputs } from '../models/FormInputsModels'
 import { createContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { loginApi, registerApi } from '../services/authService'
+import { loginApi, registerApi } from '../services/AuthService'
 import { toast } from 'react-toastify'
 import React from 'react'
 import axios from 'axios'
 
-interface UserContextType {
-  user: UserProfile | null
+type UserContextType = {
+  user: UserToStore | null
   token: string | null
-  registerUser: (props: RegisterFormInput) => void
-  loginUser: (props: LoginFormInput) => void
+  registerUser: (props: RegisterFormInputs) => void
+  loginUser: (props: LoginFormInputs) => void
   logout: () => void
   isLoggedIn: () => boolean
 }
 
-interface Props {
+type Props = {
   children: React.ReactNode
 }
 
@@ -25,7 +25,7 @@ const UserContext = createContext<UserContextType>({} as UserContextType)
 export const UserProvider = ({ children }: Props) => {
   const navigate = useNavigate()
   const [token, setToken] = useState<string | null>(null)
-  const [user, setUser] = useState<UserProfile | null>(null)
+  const [user, setUser] = useState<UserToStore | null>(null)
   const [isReady, setIsReady] = useState(false)
 
   useEffect(() => {
@@ -39,42 +39,41 @@ export const UserProvider = ({ children }: Props) => {
     setIsReady(true)
   }, [])
 
-  const loginUser = async (props: LoginFormInput) => {
+  const loginUser = async (props: LoginFormInputs) => {
     await loginApi(props)
       .then((response) => {
         console.log(response)
-
         if (response) {
           localStorage.setItem('token', response?.data.token)
           const userObject = {
-            id: response?.data.name,
+            id: response?.data.id,
             email: response?.data.email
           }
           localStorage.setItem('user', JSON.stringify(userObject))
           setToken(response?.data.token)
           setUser(userObject)
           toast.success('Login success.')
-          /* navigate('/inbox') */
+          navigate('/inbox')
         }
       })
       .catch((e) => toast.warning('Server error occured.'))
   }
 
-  const registerUser = async (props: RegisterFormInput) => {
+  const registerUser = async (props: RegisterFormInputs) => {
     await registerApi(props)
       .then((response) => {
         if (response) {
+          console.log(response)
           localStorage.setItem('token', response?.data.token)
           const userObject = {
-            id: response?.data.name,
+            id: response?.data.id,
             email: response?.data.email
           }
           localStorage.setItem('user', JSON.stringify(userObject))
           setToken(response?.data.token)
           setUser(userObject)
-          toast.success('Login success.')
-          /* navigate('/inbox') */
-          /* navigate('/login') */
+          toast.success('Register success.')
+          navigate('/inbox')
         }
       })
       .catch((e) => toast.warning('Server error occured.'))

@@ -1,26 +1,25 @@
 import axios from 'axios'
 import { toast } from 'react-toastify'
 
-export const handleError = (error: any) => {
-  if (!axios.isAxiosError(error)) {
-    return
+export const handleError = (errorObject: any) => {
+  if (!axios.isAxiosError(errorObject)) {
+    toast.warning(errorObject)
   }
-
-  let errorContent = error.response
-  if (Array.isArray(errorContent?.data.errors)) {
-    for (let v of errorContent?.data.errors) {
+  let errors = errorObject.response
+  if (Array.isArray(errors?.data.errors)) {
+    for (let v of errors?.data.errors) {
       toast.warning(v.description)
     }
-  } else if (typeof errorContent?.data.errors === 'object') {
-    for (let e in errorContent?.data.errors) {
-      toast.warning(errorContent.data.errors[e][0])
+  } else if (typeof errors?.data.errors === 'object') {
+    for (let e in errors?.data.errors) {
+      toast.warning(errors.data.errors[e][0])
     }
-  } else if (errorContent?.data) {
-    toast.warning(errorContent.data)
-  } else if (errorContent?.status === 401) {
+  } else if (errors?.data) {
+    toast.warning(errors.data)
+  } else if (errors?.status === 401) {
     toast.warning('Please login')
     window.history.pushState({}, 'LoginPage', '/login')
   } else {
-    toast.warning(errorContent?.data)
+    toast.warning(errors?.data)
   }
 }

@@ -18,7 +18,7 @@ public class RegisterUserDto
 
     [Required(ErrorMessage = "Email is required.")]
     [StringLength(40, MinimumLength = 10, ErrorMessage = "Email field length must be in range [10, 40].")]
-    [EmailAddress]
+    [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Must contain letters only.")]
     public string Email { get; set; } = null!;
 
     [Required(ErrorMessage = "Password is required.")]

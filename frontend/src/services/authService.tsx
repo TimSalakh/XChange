@@ -1,13 +1,13 @@
 import axios from 'axios'
-import { LoginFormInput, RegisterFormInput } from '../models/formInputs'
-import { handleError } from './errorService'
-import { UserContextToken } from '../models/user'
+import { LoginFormInputs, RegisterFormInputs } from '../models/FormInputsModels'
+import { handleError } from './ErrorService'
+import { UserAuthResponse } from '../models/UserModels'
 
-const apiUrl = 'https://localhost:8888/api/user'
+const apiUrl = 'https://localhost:8888/api/auth'
 
-const loginApi = async (props: LoginFormInput) => {
+const loginApi = async (props: LoginFormInputs) => {
   try {
-    const response = await axios.post<UserContextToken>(
+    const response = await axios.post<UserAuthResponse>(
       `${apiUrl}/login`,
       props
     )
@@ -17,9 +17,9 @@ const loginApi = async (props: LoginFormInput) => {
   }
 }
 
-const registerApi = async (props: RegisterFormInput) => {
+const registerApi = async (props: RegisterFormInputs) => {
   try {
-    const response = await axios.post<UserContextToken>(
+    const response = await axios.post<UserAuthResponse>(
       `${apiUrl}/register`,
       props
     )

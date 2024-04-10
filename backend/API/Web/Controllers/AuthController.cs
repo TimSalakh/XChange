@@ -5,13 +5,13 @@ using API.BLL.Services.Interfaces;
 
 namespace Web.API.Web.Controllers;
 
-[Route("api/user")]
+[Route("api/auth")]
 [ApiController]
-public class UserController : Controller
+public class AuthController : Controller
 {
-    private readonly IUserService _userService;
+    private readonly IAuthService _userService;
 
-    public UserController(IUserService userService)
+    public AuthController(IAuthService userService)
     {
         _userService = userService;
     }
@@ -24,8 +24,8 @@ public class UserController : Controller
 
         var result = await _userService.RegisterAsync(registerUserDto);
 
-        if (string.IsNullOrEmpty(result))
-            return BadRequest("Server error.");
+        if (result == null)
+            return BadRequest("User with this data already exists.");
 
         return Ok(result);
     }
@@ -38,29 +38,10 @@ public class UserController : Controller
 
         var result = await _userService.LoginAsync(loginUserDto);
 
-        if (string.IsNullOrEmpty(result))
+        if (result == null)
             return Unauthorized("Invalid email/password.");
 
         return Ok(result);
-    }
-
-    [Authorize]
-    [HttpPost("{id:guid}/edit")]
-    public async Task<IActionResult> Edit([FromRoute] Guid id, [FromBody] EditUserDto editUserDto)
-    {
-        if (!ModelState.IsValid)
-            return BadRequest(ModelState);
-
-        await _userService.EditAsync(id, editUserDto);
-        return Ok("User successfully updated.");
-    }
-
-    [Authorize]
-    [HttpDelete("{id:guid}/delete")]
-    public async Task<IActionResult> Delete([FromRoute] Guid id)
-    {
-        await _userService.RemoveAsync(id);
-        return Ok("User successfully deleted.");
     }
 
     [Authorize]

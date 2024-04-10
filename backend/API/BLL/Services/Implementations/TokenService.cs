@@ -15,13 +15,11 @@ public class TokenService : ITokenService
         _configuration = configuration;
     }
 
-    public string GetToken(Guid id, string email)
+    public string CreateToken(params string[] claims)
     {
-        var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.Name, id.ToString()),
-            new Claim(ClaimTypes.Email, email)
-        };
+        var claimsToStore = claims
+            .Select(c => new Claim(ClaimTypes.UserData, c))
+            .ToList();
 
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
             _configuration.GetSection("Jwt:SigningKey").Value!));
@@ -31,7 +29,7 @@ public class TokenService : ITokenService
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = new ClaimsIdentity(claims),
+            Subject = new ClaimsIdentity(claimsToStore),
             Expires = DateTime.Now.AddMinutes(1),
             SigningCredentials = singningCreds,
             Issuer = _configuration.GetSection("Jwt:Issuer").Value!,

@@ -46,41 +46,13 @@ public static class Middleware
                 ValidateLifetime = true
             };
         });
-
-        //builder.Services.AddSwaggerGen(option =>
-        //{
-        //    option.SwaggerDoc("v1", new OpenApiInfo { Version = "v1" });
-        //    option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-        //    {
-        //        In = ParameterLocation.Header,
-        //        Description = "Please enter a valid token",
-        //        Name = "Authorization",
-        //        Type = SecuritySchemeType.Http,
-        //        BearerFormat = "JWT",
-        //        Scheme = "Bearer"
-        //    });
-        //    option.AddSecurityRequirement(new OpenApiSecurityRequirement
-        //    {
-        //        {
-        //            new OpenApiSecurityScheme
-        //            {
-        //                Reference = new OpenApiReference
-        //                {
-        //                    Type = ReferenceType.SecurityScheme,
-        //                    Id = "Bearer"
-        //                }
-        //            },
-        //            new string[]{}
-        //        }
-        //    });
-        //});
     }
 
     public static void ApplyDI(this WebApplicationBuilder builder)
     {
         builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddScoped<ILetterRepository, LetterRepository>();
-        builder.Services.AddScoped<IUserService, UserService>();
+        builder.Services.AddScoped<IAuthService, AuthService>();
         builder.Services.AddScoped<ILetterService, LetterService>();
         builder.Services.AddScoped<IAdminService, AdminService>();
         builder.Services.AddScoped<ITokenService, TokenService>();
