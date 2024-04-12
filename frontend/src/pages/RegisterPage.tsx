@@ -8,7 +8,6 @@ import { Link } from 'react-router-dom'
 const validation = Yup.object().shape({
   name: Yup.string().required('Name is required.'),
   surname: Yup.string().required('Surname is required.'),
-  age: Yup.number().required('Age is required.'),
   email: Yup.string().required('Email is required.'),
   password: Yup.string().required('Password is required.')
 })
@@ -27,10 +26,14 @@ const RegisterPage = () => {
   }
 
   return (
-    <div className='flex justify-center items-center h-screen'>
-      <div className='w-1/3 p-10 rounded-lg ring-1 ring-gray-200 shadow-xl'>
+    <div className='flex justify-center items-center h-screen bg-slate-50'>
+      <div className='w-1/3 p-10 rounded-lg ring-1 ring-gray-200 shadow-xl bg-white'>
         <div>
-          <h1 className='text-3xl font-bold mb-5'>Register form</h1>
+          <h1 className='text-3xl font-bold mb-5'>
+            Welcome to{' '}
+            <span className='text-blue-800 font-black italic mr-1'>X</span>
+            Change <br /> Please register
+          </h1>
         </div>
         <form className='flex flex-col' onSubmit={handleSubmit(handleLogin)}>
           <input
@@ -53,24 +56,14 @@ const RegisterPage = () => {
           ) : (
             ''
           )}
-          <input
-            className='placeholder-gray-400 text-xl h-10 my-3 p-2 pb-3 focus:outline-none border-b-2 border-gray-200 focus:border-gray-500'
-            placeholder='Enter your age here'
-            {...register('age')}
-          />
-          {errors.age ? (
-            <p className='font-bold text-red-600'>{errors.age.message}</p>
-          ) : (
-            ''
-          )}
-          <div className='flex flex-row justify-start items-center'>
+          <div className='flex flex-row justify-between items-center'>
             <input
-              className='placeholder-gray-400 text-xl h-10 my-3 p-2 pb-3 focus:outline-none border-b-2 border-gray-200 focus:border-gray-500'
-              placeholder='Enter your email here'
+              className='placeholder-gray-400 text-xl h-10 my-3 p-2 pb-3 focus:outline-none border-b-2 border-gray-200 focus:border-gray-500 w-full'
+              placeholder='Enter your email prefix here'
               {...register('email')}
             />
-            <p className='ml-2 pb-2 text-xl font-medium tracking-wide'>
-              / @xchange.ru
+            <p className='ml-2 pb-2 text-2xl font-medium tracking-wide'>
+              @xchange.ru
             </p>
           </div>
           {errors.email ? (
@@ -92,14 +85,14 @@ const RegisterPage = () => {
           <div className='flex flex-row justify-between items-center mt-5'>
             <button
               type='submit'
-              className='bg-black rounded-lg h-12 tracking-wide text-white px-7 text-lg font-medium hover:bg-gray-800 transition duration-200 ease-in-out'
+              className='bg-black rounded-lg h-12 tracking-wider text-white px-7 text-lg font-bold hover:bg-gray-800 transition duration-200 ease-in-out'
             >
               Register
             </button>
             <div className='flex flex-row justify-between items-center'>
               <p className='text-lg'>Got an account?</p>
               <Link
-                className='tracking-wide text-lg ml-1 underline text-blue-800'
+                className='tracking-wide font-bold text-lg ml-1 underline text-blue-800'
                 to='/login'
               >
                 Login

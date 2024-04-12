@@ -12,12 +12,8 @@ public class RegisterUserDto
     [StringLength(50, MinimumLength = 3, ErrorMessage = "Surname field length must be in range [3, 50].")]
     public string Surname { get; set; } = null!;
 
-    [Required(ErrorMessage = "Age is required.")]
-    [Range(18, 125, ErrorMessage = "Age field must be in range [18, 125].")]
-    public int Age { get; set; }
-
     [Required(ErrorMessage = "Email is required.")]
-    [StringLength(40, MinimumLength = 10, ErrorMessage = "Email field length must be in range [10, 40].")]
+    [StringLength(40, MinimumLength = 8, ErrorMessage = "Email field length must be in range [10, 40].")]
     [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Must contain letters only.")]
     public string Email { get; set; } = null!;
 

@@ -24,10 +24,14 @@ const LoginPage = () => {
   }
 
   return (
-    <div className='flex justify-center items-center h-screen'>
-      <div className='w-1/3 p-10 rounded-lg ring-1 ring-gray-200 shadow-xl'>
+    <div className='flex justify-center items-center h-screen bg-slate-50'>
+      <div className='w-1/3 p-10 rounded-lg ring-1 ring-gray-200 shadow-xl bg-white'>
         <div>
-          <h1 className='text-3xl font-bold mb-5'>Login form</h1>
+          <h1 className='text-3xl font-bold mb-5'>
+            Welcome to{' '}
+            <span className='text-blue-800 font-black italic mr-1'>X</span>
+            Change <br /> Please login
+          </h1>
         </div>
         <form className='flex flex-col' onSubmit={handleSubmit(handleLogin)}>
           <input
@@ -54,14 +58,14 @@ const LoginPage = () => {
           <div className='flex flex-row justify-between items-center mt-5'>
             <button
               type='submit'
-              className='bg-black rounded-lg h-12 tracking-wide text-white px-7 text-lg font-medium hover:bg-gray-800 transition duration-200 ease-in-out'
+              className='bg-black rounded-lg h-12 tracking-wider text-white px-7 text-lg font-bold hover:bg-gray-800 transition duration-200 ease-in-out'
             >
               Login
             </button>
             <div className='flex flex-row justify-between items-center'>
               <p className='text-lg'>Not a member?</p>
               <Link
-                className='tracking-wide text-lg ml-1 underline text-blue-800'
+                className='tracking-wide font-bold text-lg ml-1 underline text-blue-800'
                 to='/register'
               >
                 Register

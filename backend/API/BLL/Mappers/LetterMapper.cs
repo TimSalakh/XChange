@@ -5,12 +5,12 @@ namespace API.BLL.Mappers;
 
 public static class LetterMapper
 {
-    public static Letter ToLetterTable(this ComposeLetterDto composeLetterDto)
+    public static Letter ToLetterTable(this ComposeLetterDto composeLetterDto, Guid receiverId)
     {
         return new Letter
         {
-            SenderId = composeLetterDto.Sender,
-            ReceiverId = composeLetterDto.Receiver,
+            SenderId = composeLetterDto.SenderId,
+            ReceiverId = receiverId,
             Date = DateTime.UtcNow.AddHours(7),
             Subject = composeLetterDto.Subject,
             Body = composeLetterDto.Body

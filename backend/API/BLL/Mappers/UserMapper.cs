@@ -11,7 +11,6 @@ public static class UserMapper
         {
             Name = registerUserDto.Name,
             Surname = registerUserDto.Surname,
-            Age = registerUserDto.Age,
             Email = registerUserDto.Email,
             CreationDate = DateTime.UtcNow.AddHours(7), // GMT + 7
             UserName = registerUserDto.Email // dummy 
@@ -24,7 +23,6 @@ public static class UserMapper
         {
             Id = user.Id,
             FullName = $"{user.Name} {user.Surname}",
-            Age = user.Age,
             Email = user.Email!,
             Country = string.IsNullOrEmpty(user.Country) ? "NONE" : user.Country,
             City = string.IsNullOrEmpty(user.City) ? "NONE" : user.City,

@@ -5,13 +5,14 @@ namespace API.BLL.DTOs.LetterDTOs;
 public class ComposeLetterDto
 {
     [Required]
-    public Guid Sender { get; set; }
+    public Guid SenderId { get; set; }
 
     [Required]
-    public Guid Receiver { get; set; }
+    [EmailAddress]
+    public string ReceiverEmail { get; set; } = null!;
 
     [Required]
-    [StringLength(50, ErrorMessage = "Subject max legth is 50.")]
+    [StringLength(50, MinimumLength = 1, ErrorMessage = "Subject max legth is 50 characters.")]
     public string Subject { get; set; } = null!;
 
     [Required]

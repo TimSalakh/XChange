@@ -6,7 +6,6 @@ public class User : IdentityUser<Guid>
 {
     public string Name { get; set; }
     public string Surname { get; set; }
-    public int Age { get; set; }
     public string? Country { get; set; }
     public string? City { get; set; }
     public string? Bio { get; set; }

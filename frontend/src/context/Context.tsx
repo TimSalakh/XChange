@@ -34,7 +34,7 @@ export const UserProvider = ({ children }: Props) => {
     if (user && token) {
       setUser(JSON.parse(user))
       setToken(token)
-      axios.defaults.headers.common['Authorization'] = 'Bearer' + token
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
     }
     setIsReady(true)
   }, [])
@@ -42,7 +42,6 @@ export const UserProvider = ({ children }: Props) => {
   const loginUser = async (props: LoginFormInputs) => {
     await loginApi(props)
       .then((response) => {
-        console.log(response)
         if (response) {
           localStorage.setItem('token', response?.data.token)
           const userObject = {
@@ -53,7 +52,7 @@ export const UserProvider = ({ children }: Props) => {
           setToken(response?.data.token)
           setUser(userObject)
           toast.success('Login success.')
-          navigate('/inbox')
+          navigate('/mail-dashboard/inbox')
         }
       })
       .catch((e) => toast.warning('Server error occured.'))
@@ -63,7 +62,6 @@ export const UserProvider = ({ children }: Props) => {
     await registerApi(props)
       .then((response) => {
         if (response) {
-          console.log(response)
           localStorage.setItem('token', response?.data.token)
           const userObject = {
             id: response?.data.id,
@@ -73,7 +71,7 @@ export const UserProvider = ({ children }: Props) => {
           setToken(response?.data.token)
           setUser(userObject)
           toast.success('Register success.')
-          navigate('/inbox')
+          navigate('/mail-dashboard/inbox')
         }
       })
       .catch((e) => toast.warning('Server error occured.'))

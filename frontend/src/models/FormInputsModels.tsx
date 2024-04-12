@@ -6,7 +6,12 @@ export type LoginFormInputs = {
 export type RegisterFormInputs = {
   name: string
   surname: string
-  age: number
   email: string
   password: string
+}
+
+export type ComposeFormInputs = {
+  receiver: string
+  subject: string
+  body: string
 }

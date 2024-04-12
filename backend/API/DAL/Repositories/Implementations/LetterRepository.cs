@@ -39,6 +39,8 @@ public class LetterRepository : ILetterRepository
     public async Task<Letter?> GetByIdAsync(Guid id)
     {
         return await _context.Letter
+            .Include(l => l.Sender)
+            .Include(l => l.Receiver)
             .FirstOrDefaultAsync(l => l.Id == id);
     }
 }

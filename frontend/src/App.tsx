@@ -7,8 +7,8 @@ const App = () => {
   return (
     <>
       <UserProvider>
-        <Outlet />
         <ToastContainer />
+        <Outlet />
       </UserProvider>
     </>
   )

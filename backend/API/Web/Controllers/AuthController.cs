@@ -43,8 +43,4 @@ public class AuthController : Controller
 
         return Ok(result);
     }
-
-    [Authorize]
-    [HttpGet("secret")]
-    public string Secret() => "SUCK MY LEG!";
 }
