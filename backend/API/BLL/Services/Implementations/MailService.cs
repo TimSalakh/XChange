@@ -35,7 +35,7 @@ public class MailService : IMailService
         return string.Empty;
     }
 
-    public async Task<IEnumerable<DisplayLetterDto>> LoadReceivedAsync(Guid userId)
+    public async Task<IEnumerable<DisplayLetterDto>> LoadInboxAsync(Guid userId)
     {
         var user = await _userRepository.GetByIdAsync(userId);
         IQueryable<Letter> letters = await _letterRepository.GetAllAsync();

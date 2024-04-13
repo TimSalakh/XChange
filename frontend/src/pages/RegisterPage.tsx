@@ -26,14 +26,18 @@ const RegisterPage = () => {
   }
 
   return (
-    <div className='flex justify-center items-center h-screen bg-slate-50'>
+    <div className='flex flex-col justify-center items-center h-screen bg-slate-50'>
+      <div>
+        <h1 className='text-3xl font-bold mb-5'>
+          {' '}
+          Welcome to{' '}
+          <span className='text-purple-900 font-black italic mr-1'>X</span>
+          <span className='tracking-tighter'>Change</span> Mail
+        </h1>
+      </div>
       <div className='w-1/3 p-10 rounded-lg ring-1 ring-gray-200 shadow-xl bg-white'>
         <div>
-          <h1 className='text-3xl font-bold mb-5'>
-            Welcome to{' '}
-            <span className='text-blue-800 font-black italic mr-1'>X</span>
-            Change <br /> Please register
-          </h1>
+          <h1 className='text-2xl font-bold mb-5'>Please register</h1>
         </div>
         <form className='flex flex-col' onSubmit={handleSubmit(handleLogin)}>
           <input
@@ -62,7 +66,7 @@ const RegisterPage = () => {
               placeholder='Enter your email prefix here'
               {...register('email')}
             />
-            <p className='ml-2 pb-2 text-2xl font-medium tracking-wide'>
+            <p className='ml-2 pb-2 text-2xl font-medium tracking-wide text-gray-600'>
               @xchange.ru
             </p>
           </div>
@@ -85,14 +89,14 @@ const RegisterPage = () => {
           <div className='flex flex-row justify-between items-center mt-5'>
             <button
               type='submit'
-              className='bg-black rounded-lg h-12 tracking-wider text-white px-7 text-lg font-bold hover:bg-gray-800 transition duration-200 ease-in-out'
+              className='bg-purple-900 rounded-lg h-10 tracking-tight text-white px-6 text-lg font-bold hover:bg-purple-700 transition duration-200 ease-in-out'
             >
               Register
             </button>
-            <div className='flex flex-row justify-between items-center'>
+            <div className='flex flex-row justify-between items-center tracking-tight'>
               <p className='text-lg'>Got an account?</p>
               <Link
-                className='tracking-wide font-bold text-lg ml-1 underline text-blue-800'
+                className='tracking-tight font-bold text-lg ml-1 underline text-blue-800'
                 to='/login'
               >
                 Login

@@ -8,12 +8,17 @@ import Sent from '../components/Sent'
 import App from '../App'
 import Compose from '../components/Compose'
 import LetterOverview from '../components/LetterOverview'
+import WelcomePage from '../pages/WelcomePage'
 
 export const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
     children: [
+      {
+        path: '/welcome',
+        element: <WelcomePage />
+      },
       {
         path: '/login',
         element: <LoginPage />
@@ -23,17 +28,20 @@ export const router = createBrowserRouter([
         element: <RegisterPage />
       },
       {
-        path: '/mail-dashboard',
+        path: '/:uid',
         element: (
           <ProtectedRoute>
             <DashboardPage />
           </ProtectedRoute>
         ),
         children: [
-          { path: '/mail-dashboard/inbox', element: <Inbox /> },
-          { path: '/mail-dashboard/sent', element: <Sent /> },
-          { path: '/mail-dashboard/letter/:id', element: <LetterOverview /> },
-          { path: '/mail-dashboard/compose', element: <Compose /> }
+          { path: '/:uid/inbox', element: <Inbox /> },
+          { path: '/:uid/sent', element: <Sent /> },
+          {
+            path: '/:uid/letter/:lid',
+            element: <LetterOverview />
+          },
+          { path: '/:uid/compose', element: <Compose /> }
         ]
       }
     ]

@@ -32,11 +32,11 @@ public class MailController : Controller
     }
 
     [Authorize]
-    [HttpGet("{uid:guid}/received")]
-    public async Task<IActionResult> LoadReceived(Guid uid)
+    [HttpGet("{uid:guid}/inbox")]
+    public async Task<IActionResult> LoadInbox(Guid uid)
     {
-        var received = await _mailService.LoadReceivedAsync(uid);
-        return Ok(received);
+        var inbox = await _mailService.LoadInboxAsync(uid);
+        return Ok(inbox);
     }
 
     [Authorize]

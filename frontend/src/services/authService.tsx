@@ -9,7 +9,12 @@ const loginApi = async (props: LoginFormInputs) => {
   try {
     const response = await axios.post<UserAuthResponse>(
       `${apiUrl}/login`,
-      props
+      props,
+      {
+        headers: {
+          'Access-Control-Allow-Origin': '*'
+        }
+      }
     )
     return response
   } catch (error) {
@@ -21,7 +26,12 @@ const registerApi = async (props: RegisterFormInputs) => {
   try {
     const response = await axios.post<UserAuthResponse>(
       `${apiUrl}/register`,
-      props
+      props,
+      {
+        headers: {
+          'Access-Control-Allow-Origin': '*'
+        }
+      }
     )
     return response
   } catch (error) {

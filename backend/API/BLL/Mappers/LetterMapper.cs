@@ -24,7 +24,7 @@ public static class LetterMapper
             Id = letter.Id,
             Sender = $"{letter.Sender!.Name} {letter.Sender.Surname}",
             Receiver = $"{letter.Receiver!.Name} {letter.Receiver.Surname}",
-            Date = letter.Date,
+            Date = letter.Date.ToString("dd.MM.yy HH:mm"),
             Subject = letter.Subject,
             Body = letter.Body
         };

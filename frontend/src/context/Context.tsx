@@ -35,6 +35,7 @@ export const UserProvider = ({ children }: Props) => {
       setUser(JSON.parse(user))
       setToken(token)
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
+      axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
     }
     setIsReady(true)
   }, [])
@@ -52,7 +53,7 @@ export const UserProvider = ({ children }: Props) => {
           setToken(response?.data.token)
           setUser(userObject)
           toast.success('Login success.')
-          navigate('/mail-dashboard/inbox')
+          navigate(`/${response.data.id}/inbox`)
         }
       })
       .catch((e) => toast.warning('Server error occured.'))
@@ -71,7 +72,7 @@ export const UserProvider = ({ children }: Props) => {
           setToken(response?.data.token)
           setUser(userObject)
           toast.success('Register success.')
-          navigate('/mail-dashboard/inbox')
+          navigate(`/${response.data.id}/inbox`)
         }
       })
       .catch((e) => toast.warning('Server error occured.'))

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { receivedApi } from '../services/MailService'
+import { inboxApi } from '../services/MailService'
 import { LetterPreviewModel } from '../models/LetterModels'
 import { handleError } from '../services/ErrorService'
 import LetterPreview from './LetterPreview'
@@ -10,7 +10,7 @@ const Inbox = () => {
   useEffect(() => {
     const fetchInbox = async () => {
       try {
-        const response = await receivedApi()
+        const response = await inboxApi()
         if (response && response.data) {
           setInbox(response.data)
         }
