@@ -3,13 +3,13 @@ import { LoginFormInputs, RegisterFormInputs } from '../models/FormInputsModels'
 import { handleError } from './ErrorService'
 import { UserAuthResponse } from '../models/UserModels'
 
-const apiUrl = 'https://localhost:8888/api/auth'
+const baseApiUrl = 'https://localhost:8888/api/auth'
 
-const loginApi = async (props: LoginFormInputs) => {
+const loginApi = async (inputs: LoginFormInputs) => {
   try {
     const response = await axios.post<UserAuthResponse>(
-      `${apiUrl}/login`,
-      props,
+      `${baseApiUrl}/login`,
+      inputs,
       {
         headers: {
           'Access-Control-Allow-Origin': '*'
@@ -22,11 +22,11 @@ const loginApi = async (props: LoginFormInputs) => {
   }
 }
 
-const registerApi = async (props: RegisterFormInputs) => {
+const registerApi = async (inputs: RegisterFormInputs) => {
   try {
     const response = await axios.post<UserAuthResponse>(
-      `${apiUrl}/register`,
-      props,
+      `${baseApiUrl}/register`,
+      inputs,
       {
         headers: {
           'Access-Control-Allow-Origin': '*'

@@ -2,6 +2,7 @@
 using API.BLL.DTOs.LetterDTOs;
 using API.BLL.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using System.ComponentModel.DataAnnotations;
 
 namespace Web.API.Web.Controllers;
 
@@ -33,7 +34,7 @@ public class MailController : Controller
 
     [Authorize]
     [HttpGet("{uid:guid}/inbox")]
-    public async Task<IActionResult> LoadInbox(Guid uid)
+    public async Task<IActionResult> LoadInbox([FromRoute] Guid uid)
     {
         var inbox = await _mailService.LoadInboxAsync(uid);
         return Ok(inbox);
@@ -41,7 +42,7 @@ public class MailController : Controller
 
     [Authorize]
     [HttpGet("{uid:guid}/sent")]
-    public async Task<IActionResult> LoadSent(Guid uid)
+    public async Task<IActionResult> LoadSent([FromRoute] Guid uid)
     {
         var sent = await _mailService.LoadSentAsync(uid);
         return Ok(sent);
@@ -49,9 +50,17 @@ public class MailController : Controller
 
     [Authorize]
     [HttpGet("letter/{lid:guid}")]
-    public async Task<IActionResult> LoadLetter(Guid lid)
+    public async Task<IActionResult> LoadLetter([FromRoute] Guid lid)
     {
         var letter = await _mailService.LoadLetter(lid);
         return Ok(letter);
+    }
+
+    [Authorize]
+    [HttpGet("user-exist/{email}")]
+    public async Task<IActionResult> DoesUserExist([FromRoute] string email)
+    {
+        var result = await _mailService.DoesUserExistAsync(email);
+        return result ? Ok() : BadRequest();
     }
 }

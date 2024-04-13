@@ -2,9 +2,10 @@ import { ComposeFormInputs } from '../models/FormInputsModels'
 import * as Yup from 'yup'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { composeApi } from '../services/MailService'
+import { composeApi, doesUserExistApi } from '../services/MailService'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/Context'
+import { toast } from 'react-toastify'
 
 const validation = Yup.object().shape({
   receiver: Yup.string().required("Receiver's email is required"),
@@ -22,8 +23,13 @@ const Compose = () => {
     formState: { errors }
   } = useForm<ComposeFormInputs>({ resolver: yupResolver(validation) })
 
-  const handleCompose = (form: ComposeFormInputs) => {
-    composeApi(form)
+  const handleCompose = async (form: ComposeFormInputs) => {
+    if (!(await doesUserExistApi(form.receiver))) {
+      toast.warning("Incorrect receiver's email. User doesn't exist.")
+      return
+    }
+    await composeApi(form, user!.id)
+    toast.success('Letter sent.')
     navigate(`/${user!.id}/inbox`)
   }
 

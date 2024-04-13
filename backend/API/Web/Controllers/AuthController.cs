@@ -23,11 +23,7 @@ public class AuthController : Controller
             return BadRequest(ModelState);
 
         var result = await _userService.RegisterAsync(registerUserDto);
-
-        if (result == null)
-            return BadRequest("User with this data already exists.");
-
-        return Ok(result);
+        return result != null ? Ok(result) : BadRequest("User with this data already exists.");
     }
 
     [HttpPost("login")]
@@ -37,10 +33,6 @@ public class AuthController : Controller
             return BadRequest(ModelState);
 
         var result = await _userService.LoginAsync(loginUserDto);
-
-        if (result == null)
-            return Unauthorized("Invalid email/password.");
-
-        return Ok(result);
+        return result != null ? Ok(result) : Unauthorized("Invalid email/password.");
     }
 }

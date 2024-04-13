@@ -43,14 +43,14 @@ export const UserProvider = ({ children }: Props) => {
   const loginUser = async (props: LoginFormInputs) => {
     await loginApi(props)
       .then((response) => {
-        if (response) {
+        if (response?.status === 200) {
           localStorage.setItem('token', response?.data.token)
           const userObject = {
             id: response?.data.id,
             email: response?.data.email
           }
           localStorage.setItem('user', JSON.stringify(userObject))
-          setToken(response?.data.token)
+          setToken(response.data.token)
           setUser(userObject)
           toast.success('Login success.')
           navigate(`/${response.data.id}/inbox`)

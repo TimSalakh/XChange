@@ -1,31 +1,36 @@
 import { ComposeFormInputs } from '../models/FormInputsModels'
 import axios from 'axios'
 import { handleError } from './ErrorService'
-import { toast } from 'react-toastify'
 import { LetterPreviewModel, LetterOverviewModel } from '../models/LetterModels'
-import { UserToStore } from '../models/UserModels'
 
-const apiUrl = 'https://localhost:8888/api/xchangemail'
-const user: UserToStore = JSON.parse(localStorage.getItem('user') || '{}')
+const baseApiUrl = 'https://localhost:8888/api/xchangemail'
 
-const composeApi = async (props: ComposeFormInputs) => {
+const doesUserExistApi = async (email: string) => {
   try {
-    await axios.post(`${apiUrl}/compose`, {
-      senderId: user!.id,
-      receiverEmail: props.receiver,
-      subject: props.subject,
-      body: props.body
+    var response = await axios.get(`${baseApiUrl}/user-exist/${email}`)
+    return response.status === 200
+  } catch (error) {
+    handleError(error)
+  }
+}
+
+const composeApi = async (inputs: ComposeFormInputs, userId: string) => {
+  try {
+    await axios.post(`${baseApiUrl}/compose`, {
+      senderId: userId,
+      receiverEmail: inputs.receiver,
+      subject: inputs.subject,
+      body: inputs.body
     })
-    toast.success('Letter sent.')
   } catch (error) {
     handleError(error)
   }
 }
 
-const inboxApi = async () => {
+const inboxApi = async (userId: string) => {
   try {
     const response = await axios.get<LetterPreviewModel[]>(
-      `${apiUrl}/${user!.id}/inbox`
+      `${baseApiUrl}/${userId}/inbox`
     )
     return response
   } catch (error) {
@@ -33,10 +38,10 @@ const inboxApi = async () => {
   }
 }
 
-const sentApi = async () => {
+const sentApi = async (userId: string) => {
   try {
     const response = await axios.get<LetterPreviewModel[]>(
-      `${apiUrl}/${user!.id}/sent`
+      `${baseApiUrl}/${userId}/sent`
     )
     return response
   } catch (error) {
@@ -44,10 +49,10 @@ const sentApi = async () => {
   }
 }
 
-const letterApi = async (id: string) => {
+const letterApi = async (letterId: string) => {
   try {
     const response = await axios.get<LetterOverviewModel>(
-      `${apiUrl}/letter/${id}`
+      `${baseApiUrl}/letter/${letterId}`
     )
     return response
   } catch (error) {
@@ -55,4 +60,4 @@ const letterApi = async (id: string) => {
   }
 }
 
-export { composeApi, inboxApi, sentApi, letterApi }
+export { composeApi, inboxApi, sentApi, letterApi, doesUserExistApi }

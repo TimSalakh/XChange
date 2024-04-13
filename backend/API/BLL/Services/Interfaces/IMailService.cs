@@ -8,4 +8,5 @@ public interface IMailService
     Task<IEnumerable<DisplayLetterDto>> LoadInboxAsync(Guid userId);
     Task<IEnumerable<DisplayLetterDto>> LoadSentAsync(Guid userId);
     Task<DisplayLetterDto> LoadLetter(Guid letterId);
+    Task<bool> DoesUserExistAsync(string email);  
 }
