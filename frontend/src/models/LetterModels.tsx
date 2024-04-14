@@ -9,7 +9,6 @@ export type LetterPreviewModel = {
 export type LetterOverviewModel = {
   id: string
   sender: string
-  receiver: string
   body: string
   subject: string
   date: string

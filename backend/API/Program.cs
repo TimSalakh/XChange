@@ -13,22 +13,23 @@ builder.ApplyIdentity();
 builder.ApplyAuth();
 builder.ApplyDI();
 
-builder.Services.AddSwaggerGen();
+//builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
 
-app.UseHttpsRedirection();
-app.UseAuthentication();
-app.UseAuthorization();
-app.UseSwagger();
-app.UseSwaggerUI();
-app.MapControllers();
 app.UseCors(x => x
      .AllowAnyMethod()
      .AllowAnyHeader()
      .AllowCredentials()
      .SetIsOriginAllowed(origin => true));
+
+app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
+//app.UseSwagger();
+//app.UseSwaggerUI();
+app.MapControllers();
 
 app.Run();

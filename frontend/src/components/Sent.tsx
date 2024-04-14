@@ -13,9 +13,7 @@ const Sent = () => {
     const fetchSent = async () => {
       try {
         const response = await sentApi(user!.id)
-        if (response && response.data) {
-          setSent(response.data)
-        }
+        setSent(response!.data)
       } catch (error) {
         handleError(error)
       }
@@ -24,7 +22,7 @@ const Sent = () => {
   }, [user])
 
   return (
-    <div className='w-full h-full flex flex-col justify-start items-center'>
+    <div className='w-full h-full flex flex-col justify-start items-center overflow-y-auto'>
       {sent.length === 0 ? (
         <div className='h-full w-full border-slate-300 font-medium text-4xl tracking-tight flex flex-row justify-center items-center text-slate-300'>
           No sent letters

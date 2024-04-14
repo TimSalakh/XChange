@@ -5,6 +5,7 @@ using API.BLL.DTOs.LetterDTOs;
 using API.BLL.Mappers;
 using API.BLL.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
+using API.BLL.DTOs.UserDTOs;
 
 namespace API.BLL.Services.Implementations;
 
@@ -75,5 +76,11 @@ public class MailService : IMailService
     {
         var user = await _userManager.FindByEmailAsync(email);
         return user != null;
+    }
+
+    public async Task<DisplayUserDto> LoadUserData(string email)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+        return user!.ToDisplayUserDto();
     }
 }

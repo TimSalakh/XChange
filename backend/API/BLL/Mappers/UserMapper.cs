@@ -12,8 +12,8 @@ public static class UserMapper
             Name = registerUserDto.Name,
             Surname = registerUserDto.Surname,
             Email = registerUserDto.Email,
-            CreationDate = DateTime.UtcNow.AddHours(7), // GMT + 7
-            UserName = registerUserDto.Email // dummy 
+            CreationDate = DateTime.UtcNow.AddHours(7), 
+            UserName = registerUserDto.Email 
         };
     }
 

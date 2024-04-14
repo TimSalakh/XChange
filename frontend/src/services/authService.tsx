@@ -1,13 +1,13 @@
 import axios from 'axios'
 import { LoginFormInputs, RegisterFormInputs } from '../models/FormInputsModels'
 import { handleError } from './ErrorService'
-import { UserAuthResponse } from '../models/UserModels'
+import { UserAuthResponseModel } from '../models/UserModels'
 
 const baseApiUrl = 'https://localhost:8888/api/auth'
 
 const loginApi = async (inputs: LoginFormInputs) => {
   try {
-    const response = await axios.post<UserAuthResponse>(
+    const response = await axios.post<UserAuthResponseModel>(
       `${baseApiUrl}/login`,
       inputs,
       {
@@ -24,7 +24,7 @@ const loginApi = async (inputs: LoginFormInputs) => {
 
 const registerApi = async (inputs: RegisterFormInputs) => {
   try {
-    const response = await axios.post<UserAuthResponse>(
+    const response = await axios.post<UserAuthResponseModel>(
       `${baseApiUrl}/register`,
       inputs,
       {

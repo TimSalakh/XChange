@@ -2,6 +2,7 @@ import { ComposeFormInputs } from '../models/FormInputsModels'
 import axios from 'axios'
 import { handleError } from './ErrorService'
 import { LetterPreviewModel, LetterOverviewModel } from '../models/LetterModels'
+import { UserDataModel } from '../models/UserModels'
 
 const baseApiUrl = 'https://localhost:8888/api/xchangemail'
 
@@ -60,4 +61,22 @@ const letterApi = async (letterId: string) => {
   }
 }
 
-export { composeApi, inboxApi, sentApi, letterApi, doesUserExistApi }
+const userDataApi = async (email: string) => {
+  try {
+    const response = await axios.get<UserDataModel>(
+      `${baseApiUrl}/user-data/${email}`
+    )
+    return response
+  } catch (error) {
+    handleError(error)
+  }
+}
+
+export {
+  composeApi,
+  inboxApi,
+  sentApi,
+  letterApi,
+  doesUserExistApi,
+  userDataApi
+}

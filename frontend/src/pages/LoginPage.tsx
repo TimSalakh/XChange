@@ -30,7 +30,7 @@ const LoginPage = () => {
           {' '}
           Welcome to{' '}
           <span className='text-purple-900 font-black italic mr-1'>X</span>
-          <span className='tracking-tighter'>Change</span> Mail
+          <span className='tracking-tighter'>Change</span>
         </h1>
       </div>
       <div className='w-1/3 p-10 rounded-lg ring-1 ring-gray-200 shadow-xl bg-white'>

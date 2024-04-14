@@ -1,17 +1,17 @@
-import { UserToStore } from '../models/UserModels'
+import { UserAuthResponseModel, UserToStoreModel } from '../models/UserModels'
 import { LoginFormInputs, RegisterFormInputs } from '../models/FormInputsModels'
 import { createContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { loginApi, registerApi } from '../services/AuthService'
 import { toast } from 'react-toastify'
 import React from 'react'
-import axios from 'axios'
+import axios, { AxiosResponse } from 'axios'
 
 type UserContextType = {
-  user: UserToStore | null
+  user: UserToStoreModel | null
   token: string | null
-  registerUser: (props: RegisterFormInputs) => void
-  loginUser: (props: LoginFormInputs) => void
+  registerUser: (inputs: RegisterFormInputs) => void
+  loginUser: (inputs: LoginFormInputs) => void
   logout: () => void
   isLoggedIn: () => boolean
 }
@@ -25,8 +25,8 @@ const UserContext = createContext<UserContextType>({} as UserContextType)
 export const UserProvider = ({ children }: Props) => {
   const navigate = useNavigate()
   const [token, setToken] = useState<string | null>(null)
-  const [user, setUser] = useState<UserToStore | null>(null)
-  const [isReady, setIsReady] = useState(false)
+  const [user, setUser] = useState<UserToStoreModel | null>(null)
+  const [isLoaded, setIsLoaded] = useState<boolean>(false)
 
   useEffect(() => {
     const user = localStorage.getItem('user')
@@ -37,49 +37,49 @@ export const UserProvider = ({ children }: Props) => {
       axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
       axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
     }
-    setIsReady(true)
+    setIsLoaded(true)
   }, [])
 
-  const loginUser = async (props: LoginFormInputs) => {
-    await loginApi(props)
+  const loginUser = async (inputs: LoginFormInputs) => {
+    await loginApi(inputs)
       .then((response) => {
         if (response?.status === 200) {
-          localStorage.setItem('token', response?.data.token)
-          const userObject = {
-            id: response?.data.id,
-            email: response?.data.email
-          }
-          localStorage.setItem('user', JSON.stringify(userObject))
-          setToken(response.data.token)
-          setUser(userObject)
-          toast.success('Login success.')
-          navigate(`/${response.data.id}/inbox`)
+          handleResponse(response)
         }
       })
-      .catch((e) => toast.warning('Server error occured.'))
+      .catch((error) => toast.warning(error))
   }
 
-  const registerUser = async (props: RegisterFormInputs) => {
-    await registerApi(props)
+  const registerUser = async (inputs: RegisterFormInputs) => {
+    await registerApi(inputs)
       .then((response) => {
-        if (response) {
-          localStorage.setItem('token', response?.data.token)
-          const userObject = {
-            id: response?.data.id,
-            email: response?.data.email
-          }
-          localStorage.setItem('user', JSON.stringify(userObject))
-          setToken(response?.data.token)
-          setUser(userObject)
-          toast.success('Register success.')
-          navigate(`/${response.data.id}/inbox`)
+        if (response?.status === 200) {
+          handleResponse(response)
         }
       })
-      .catch((e) => toast.warning('Server error occured.'))
+      .catch((error) => toast.warning(error))
+  }
+
+  const handleResponse = (
+    response: AxiosResponse<UserAuthResponseModel, any>
+  ): void => {
+    localStorage.setItem('token', response.data.token)
+    const userObject = {
+      id: response.data.id,
+      email: response.data.email
+    }
+    localStorage.setItem('user', JSON.stringify(userObject))
+    setToken(response.data.token)
+    setUser(userObject)
+    axios.defaults.headers.common['Authorization'] =
+      'Bearer ' + response.data.token
+    axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
+    toast.success('Success.')
+    navigate(`/${response.data.id}/inbox`)
   }
 
   const isLoggedIn = () => {
-    return !!user
+    return !!token
   }
 
   const logout = () => {
@@ -94,7 +94,7 @@ export const UserProvider = ({ children }: Props) => {
     <UserContext.Provider
       value={{ loginUser, registerUser, user, token, isLoggedIn, logout }}
     >
-      {isReady ? children : null}
+      {isLoaded ? children : null}
     </UserContext.Provider>
   )
 }

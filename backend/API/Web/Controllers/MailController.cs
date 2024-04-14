@@ -63,4 +63,12 @@ public class MailController : Controller
         var result = await _mailService.DoesUserExistAsync(email);
         return result ? Ok() : BadRequest();
     }
+
+    [Authorize]
+    [HttpGet("user-data/{email}")]
+    public async Task<IActionResult> LoadUserData([FromRoute] string email)
+    {
+        var user = await _mailService.LoadUserData(email);
+        return Ok(user);
+    }
 }

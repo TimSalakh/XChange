@@ -4,18 +4,19 @@ import { LetterPreviewModel } from '../models/LetterModels'
 import { handleError } from '../services/ErrorService'
 import LetterPreview from './LetterPreview'
 import { useAuth } from '../context/Context'
+import { useLocation } from 'react-router-dom'
 
 const Inbox = () => {
   const [inbox, setInbox] = useState<LetterPreviewModel[]>([])
   const { user } = useAuth()
+  const location = useLocation()
 
   useEffect(() => {
     const fetchInbox = async () => {
       try {
+        console.log(`calling api inbox from ${location.pathname}`)
         const response = await inboxApi(user!.id)
-        if (response && response.data) {
-          setInbox(response.data)
-        }
+        setInbox(response!.data)
       } catch (error) {
         handleError(error)
       }

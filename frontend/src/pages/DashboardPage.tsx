@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom'
 
 const MailDashboard = () => {
   return (
-    <div className='flex flex-col h-screen w-screen'>
+    <div className='flex flex-col h-screen w-screen overflow-hidden'>
       <div>
         <Header />
       </div>
