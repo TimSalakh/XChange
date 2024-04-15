@@ -10,7 +10,7 @@ const Sidebar = () => {
     <div className='h-full w-80 flex flex-col justify-start items-center bg-slate-50 p-3'>
       <div className='flex flex-row justify-center items-center w-full mb-2'>
         <Link
-          className='text-center font-bold text-xl text-white bg-purple-900 w-full rounded-md py-1 hover:bg-purple-800 transition duration-200 ease-in-out tracking-tighter'
+          className='text-center font-bold text-xl text-white bg-purple-950 w-full rounded-md py-1 hover:bg-purple-800 transition duration-200 ease-in-out tracking-tighter'
           to={`/${user!.id}/compose`}
           onClick={() => setOption('compose')}
         >

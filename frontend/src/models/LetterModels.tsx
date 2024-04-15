@@ -1,14 +1,9 @@
-export type LetterPreviewModel = {
+export type LetterDataModel = {
   id: string
+  senderId: string
   sender: string
+  receiverId: string
   receiver: string
-  subject: string
-  date: string
-}
-
-export type LetterOverviewModel = {
-  id: string
-  sender: string
   body: string
   subject: string
   date: string

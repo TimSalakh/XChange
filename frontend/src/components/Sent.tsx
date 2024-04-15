@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import { sentApi } from '../services/MailService'
-import { LetterPreviewModel } from '../models/LetterModels'
+import { LetterDataModel } from '../models/LetterModels'
 import { handleError } from '../services/ErrorService'
 import LetterPreview from './LetterPreview'
 import { useAuth } from '../context/Context'
 
 const Sent = () => {
-  const [sent, setSent] = useState<LetterPreviewModel[]>([])
+  const [sent, setSent] = useState<LetterDataModel[]>([])
   const { user } = useAuth()
 
   useEffect(() => {

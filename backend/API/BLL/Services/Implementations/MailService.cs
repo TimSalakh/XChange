@@ -71,16 +71,4 @@ public class MailService : IMailService
         var letter = await _letterRepository.GetByIdAsync(letterId);
         return letter!.ToDisplayLetterDto();
     }
-
-    public async Task<bool> DoesUserExistAsync(string email)
-    {
-        var user = await _userManager.FindByEmailAsync(email);
-        return user != null;
-    }
-
-    public async Task<DisplayUserDto> LoadUserData(string email)
-    {
-        var user = await _userManager.FindByEmailAsync(email);
-        return user!.ToDisplayUserDto();
-    }
 }

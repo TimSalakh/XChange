@@ -9,6 +9,7 @@ import App from '../App'
 import Compose from '../components/Compose'
 import LetterOverview from '../components/LetterOverview'
 import WelcomePage from '../pages/WelcomePage'
+import ManageAccountPage from '../pages/ManageAccountPage'
 
 export const router = createBrowserRouter([
   {
@@ -43,6 +44,14 @@ export const router = createBrowserRouter([
           },
           { path: '/:uid/compose', element: <Compose /> }
         ]
+      },
+      {
+        path: '/:uid/manage-account',
+        element: (
+          <ProtectedRoute>
+            <ManageAccountPage />
+          </ProtectedRoute>
+        )
       }
     ]
   },

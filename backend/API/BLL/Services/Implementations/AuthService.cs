@@ -56,13 +56,19 @@ public class AuthService : IAuthService
         if (!result.Succeeded)
             return default;
 
+        var user = await _userManager.FindByEmailAsync(loginUserDto.Email);
         var token = _tokenService.CreateToken(targetUser.Email!);
 
         return new ResponseUserDto 
         { 
             Token = token, 
             Id = targetUser!.Id, 
-            Email = targetUser.Email! 
+            Email = targetUser.Email!,
+            Name = user!.Name,
+            Surname = user.Surname,
+            Country = user.Country,
+            City = user.City,
+            Bio = user.Bio
         };
     }
 }

@@ -1,20 +1,10 @@
-export type UserAuthResponseModel = {
+export type UserDataModel = {
   token: string
   id: string
   email: string
-}
-
-export type UserToStoreModel = {
-  id: string
-  email: string
-}
-
-export type UserDataModel = {
-  id: string
-  email: string
-  fullName: string
-  country: string
-  city: string
-  bio: string
-  creationDate: string
+  name: string
+  surname: string
+  country: string | null
+  city: string | null
+  bio: string | null
 }

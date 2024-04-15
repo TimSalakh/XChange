@@ -1,13 +1,14 @@
 import { useParams } from 'react-router-dom'
 import { letterApi } from '../services/MailService'
-import { LetterOverviewModel } from '../models/LetterModels'
+import { LetterDataModel } from '../models/LetterModels'
 import { useState, useEffect } from 'react'
 import { handleError } from '../services/ErrorService'
 import LetterSenderPopup from './LetterSenderPopup'
 
 const LetterOverview = () => {
   const { lid } = useParams<{ lid?: string }>()
-  const [letter, setLetter] = useState<LetterOverviewModel | null>(null)
+  const [letter, setLetter] = useState<LetterDataModel | null>(null)
+  const [isLoaded, setIsLoaded] = useState<boolean>(false)
 
   useEffect(() => {
     const fetchLetter = async () => {
@@ -25,12 +26,16 @@ const LetterOverview = () => {
 
   return (
     <div className='w-full h-full flex flex-col justify-start items-start bg-white border border-slate-300 p-3 rounded-lg text-xl shadow'>
-      <div className='w-full flex flex-row justify-between items-center mb-1'>
-        <p className='flex flex-row justify-between items-center mb-5'>
+      <div className='w-full flex flex-row justify-between items-center mb-5 px-1'>
+        <p className='flex flex-row justify-between items-center'>
           <span className='mr-2'>From: </span>
-          <LetterSenderPopup email={letter ? letter!.sender : null} />
+          {letter && letter.senderId ? (
+            <LetterSenderPopup userId={letter.senderId} />
+          ) : (
+            <span>Loading sender...</span>
+          )}
         </p>
-        <div>{letter?.date}</div>
+        <div className='h-auto w-auto'>{letter?.date}</div>
       </div>
       <div>
         <div className='mb-5'>

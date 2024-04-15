@@ -7,7 +7,7 @@ const WelcomePage = () => {
         <div className='mb-20'>
           <p className='text-black font-medium text-4xl tracking-tighter px-3 py-1'>
             {' '}
-            <span className='text-purple-900 font-black italic mr-1'>X</span>
+            <span className='text-purple-950 font-black italic mr-1'>X</span>
             Change Mail System
           </p>
         </div>

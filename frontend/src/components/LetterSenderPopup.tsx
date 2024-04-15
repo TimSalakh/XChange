@@ -1,19 +1,19 @@
 import { useEffect, useState } from 'react'
 import { UserDataModel } from '../models/UserModels'
-import { userDataApi } from '../services/MailService'
+import { userDataApi } from '../services/UserService'
 import { handleError } from '../services/ErrorService'
 
-const LetterSenderPopup = ({ email }: { email: string | null }) => {
+const LetterSenderPopup = ({ userId }: { userId: string | null }) => {
   const [userData, setUserData] = useState<UserDataModel | null>(null)
   const [isVisible, setIsVisible] = useState<boolean>(false)
 
   useEffect(() => {
     const fetchUserData = async () => {
-      if (!email) {
+      if (!!!userId) {
         return null
       }
       try {
-        const response = await userDataApi(email)
+        const response = await userDataApi(userId!)
         if (response && response.data) {
           setUserData(response.data)
         }
@@ -22,24 +22,30 @@ const LetterSenderPopup = ({ email }: { email: string | null }) => {
       }
     }
     fetchUserData()
-  }, [email])
+  }, [])
 
   return (
     <div>
       <p
-        className='cursor-pointer bg-slate-200 px-2 py-1 rounded-md'
+        className='cursor-pointer bg-slate-200 px-2 py-1 rounded-md hover:bg-slate-300 transition duration-200 ease-in-out'
         onMouseEnter={() => setIsVisible(true)}
         onMouseLeave={() => setIsVisible(false)}
       >
-        {email}
+        {userData ? userData.email : null}
       </p>
       {isVisible && userData && (
-        <div className='absolute z-1 right-39 w-auto bg-white border border-gray-300 shadow-lg rounded-lg p-3 mt-3'>
-          <div>Name: {userData.fullName}</div>
-          <div>
-            {userData.country}, {userData.city}
+        <div className='absolute z-1 right-39 w-auto max-w-96 text-justify bg-white border border-gray-300 shadow-lg rounded-lg p-3 mt-3'>
+          <div className='mb-1 text-lg'>
+            {userData.name} {userData.surname}
           </div>
-          <div>{userData.bio}</div>
+          {userData.country && userData.city ? (
+            <div className='mb-1 text-lg'>
+              {userData.country}, {userData.city}
+            </div>
+          ) : null}
+          {userData.bio ? (
+            <div className='text-left text-lg'>Bio: {userData.bio}</div>
+          ) : null}
         </div>
       )}
     </div>

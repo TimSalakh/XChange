@@ -22,7 +22,10 @@ public static class LetterMapper
         return new DisplayLetterDto
         {
             Id = letter.Id,
+            SenderId = letter.SenderId,
             Sender = letter.Sender!.Email!,
+            ReceiverId = letter.ReceiverId,
+            Receiver = letter.Receiver!.Email!,
             Date = letter.Date.ToString("dd.MM.yy HH:mm"),
             Subject = letter.Subject,
             Body = letter.Body

@@ -22,12 +22,12 @@ public static class UserMapper
         return new DisplayUserDto
         {
             Id = user.Id,
-            FullName = $"{user.Name} {user.Surname}",
+            Name = user.Name,
+            Surname = user.Surname,
             Email = user.Email!,
-            Country = string.IsNullOrEmpty(user.Country) ? "NONE" : user.Country,
-            City = string.IsNullOrEmpty(user.City) ? "NONE" : user.City,
-            Bio = string.IsNullOrEmpty(user.Bio) ? "NONE" : user.Bio,
-            CreationDate = user.CreationDate 
+            Country = user.Country,
+            City = user.City,
+            Bio = user.Bio
         };
     }
 }

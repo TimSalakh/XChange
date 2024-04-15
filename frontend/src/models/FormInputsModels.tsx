@@ -15,3 +15,11 @@ export type ComposeFormInputs = {
   subject: string
   body: string
 }
+
+export type ManageAccountFormInputs = {
+  name: string
+  surname: string
+  country: string | null
+  city: string | null
+  bio: string | null
+}

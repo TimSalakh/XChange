@@ -55,20 +55,4 @@ public class MailController : Controller
         var letter = await _mailService.LoadLetter(lid);
         return Ok(letter);
     }
-
-    [Authorize]
-    [HttpGet("user-exist/{email}")]
-    public async Task<IActionResult> DoesUserExist([FromRoute] string email)
-    {
-        var result = await _mailService.DoesUserExistAsync(email);
-        return result ? Ok() : BadRequest();
-    }
-
-    [Authorize]
-    [HttpGet("user-data/{email}")]
-    public async Task<IActionResult> LoadUserData([FromRoute] string email)
-    {
-        var user = await _mailService.LoadUserData(email);
-        return Ok(user);
-    }
 }

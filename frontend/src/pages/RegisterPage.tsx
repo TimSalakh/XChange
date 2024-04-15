@@ -31,7 +31,7 @@ const RegisterPage = () => {
         <h1 className='text-3xl font-bold mb-5'>
           {' '}
           Welcome to{' '}
-          <span className='text-purple-900 font-black italic mr-1'>X</span>
+          <span className='text-purple-950 font-black italic mr-1'>X</span>
           <span className='tracking-tighter'>Change</span>
         </h1>
       </div>
@@ -89,7 +89,7 @@ const RegisterPage = () => {
           <div className='flex flex-row justify-between items-center mt-5'>
             <button
               type='submit'
-              className='bg-purple-900 rounded-lg h-10 tracking-tight text-white px-6 text-lg font-bold hover:bg-purple-700 transition duration-200 ease-in-out'
+              className='bg-purple-950 rounded-lg h-10 tracking-tight text-white px-6 text-lg font-bold hover:bg-purple-800 transition duration-200 ease-in-out'
             >
               Register
             </button>

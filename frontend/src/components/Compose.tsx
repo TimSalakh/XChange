@@ -2,7 +2,8 @@ import { ComposeFormInputs } from '../models/FormInputsModels'
 import * as Yup from 'yup'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { composeApi, doesUserExistApi } from '../services/MailService'
+import { composeApi } from '../services/MailService'
+import { doesUserExistApi } from '../services/UserService'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/Context'
 import { toast } from 'react-toastify'
@@ -24,7 +25,8 @@ const Compose = () => {
   } = useForm<ComposeFormInputs>({ resolver: yupResolver(validation) })
 
   const handleCompose = async (form: ComposeFormInputs) => {
-    if (!(await doesUserExistApi(form.receiver))) {
+    const response = await doesUserExistApi(form.receiver)
+    if (!response) {
       toast.warning("Incorrect receiver's email. User doesn't exist.")
       return
     }

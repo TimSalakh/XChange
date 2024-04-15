@@ -1,19 +1,9 @@
 import { ComposeFormInputs } from '../models/FormInputsModels'
 import axios from 'axios'
 import { handleError } from './ErrorService'
-import { LetterPreviewModel, LetterOverviewModel } from '../models/LetterModels'
-import { UserDataModel } from '../models/UserModels'
+import { LetterDataModel } from '../models/LetterModels'
 
 const baseApiUrl = 'https://localhost:8888/api/xchangemail'
-
-const doesUserExistApi = async (email: string) => {
-  try {
-    var response = await axios.get(`${baseApiUrl}/user-exist/${email}`)
-    return response.status === 200
-  } catch (error) {
-    handleError(error)
-  }
-}
 
 const composeApi = async (inputs: ComposeFormInputs, userId: string) => {
   try {
@@ -30,7 +20,7 @@ const composeApi = async (inputs: ComposeFormInputs, userId: string) => {
 
 const inboxApi = async (userId: string) => {
   try {
-    const response = await axios.get<LetterPreviewModel[]>(
+    const response = await axios.get<LetterDataModel[]>(
       `${baseApiUrl}/${userId}/inbox`
     )
     return response
@@ -41,7 +31,7 @@ const inboxApi = async (userId: string) => {
 
 const sentApi = async (userId: string) => {
   try {
-    const response = await axios.get<LetterPreviewModel[]>(
+    const response = await axios.get<LetterDataModel[]>(
       `${baseApiUrl}/${userId}/sent`
     )
     return response
@@ -52,7 +42,7 @@ const sentApi = async (userId: string) => {
 
 const letterApi = async (letterId: string) => {
   try {
-    const response = await axios.get<LetterOverviewModel>(
+    const response = await axios.get<LetterDataModel>(
       `${baseApiUrl}/letter/${letterId}`
     )
     return response
@@ -61,22 +51,4 @@ const letterApi = async (letterId: string) => {
   }
 }
 
-const userDataApi = async (email: string) => {
-  try {
-    const response = await axios.get<UserDataModel>(
-      `${baseApiUrl}/user-data/${email}`
-    )
-    return response
-  } catch (error) {
-    handleError(error)
-  }
-}
-
-export {
-  composeApi,
-  inboxApi,
-  sentApi,
-  letterApi,
-  doesUserExistApi,
-  userDataApi
-}
+export { composeApi, inboxApi, sentApi, letterApi }
