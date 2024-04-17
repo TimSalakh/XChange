@@ -4,6 +4,8 @@ import { useAuth } from '../context/Context'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Link } from 'react-router-dom'
+import { VscEyeClosed, VscEye } from 'react-icons/vsc'
+import { useState } from 'react'
 
 const validation = Yup.object().shape({
   name: Yup.string().required('Name is required.'),
@@ -13,6 +15,7 @@ const validation = Yup.object().shape({
 })
 
 const RegisterPage = () => {
+  const [showPassword, setShowPassword] = useState<boolean>(false)
   const { registerUser } = useAuth()
 
   const {
@@ -75,12 +78,21 @@ const RegisterPage = () => {
           ) : (
             ''
           )}
-          <input
-            className='placeholder-gray-400 text-xl h-10 my-3 p-2 pb-3 focus:outline-none border-b-2 border-gray-200 focus:border-gray-500'
-            type='password'
-            placeholder='Enter your password here'
-            {...register('password')}
-          />
+          <div className='flex flex-row justify-between items-center'>
+            <input
+              className='placeholder-gray-400 text-xl h-10 my-3 p-2 pb-3 focus:outline-none border-b-2 border-gray-200 focus:border-gray-500 w-full'
+              type={`${showPassword ? 'text' : 'password'}`}
+              placeholder='Enter your password here'
+              {...register('password')}
+            />
+            <button
+              type='button'
+              onClick={() => setShowPassword(!showPassword)}
+              className='ml-3 hover:bg-slate-100 rounded-md p-2'
+            >
+              {showPassword ? <VscEye size={25} /> : <VscEyeClosed size={25} />}
+            </button>
+          </div>
           {errors.password ? (
             <p className='font-bold text-red-600'>{errors.password.message}</p>
           ) : (

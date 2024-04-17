@@ -13,15 +13,15 @@ const LetterPreview = (props: {
 
   return (
     <div
-      onClick={() => navigate(`/${user!.id}/letter/${id}`)}
+      onClick={() => navigate(`/uid/${user!.id}/letter/${id}`)}
       className='w-full h-10 flex flex-row justify-between items-center rounded-lg bg-white border border-slate-200 py-2 px-3 mb-2 hover:bg-slate-200 transition duration-100 ease-in-out shadow-sm'
     >
-      <div className='flex w-1/3 h-full flex-row justify-between items-center'>
+      <div className='flex w-2/5 h-full flex-row justify-between items-center'>
         <div>
-          <p className='font-medium text-xl tracking-tight'>{target}</p>
+          <p className='font-medium text-lg w-auto'>{target}</p>
         </div>
         <div>
-          <p className='font-medium text-xl tracking-tight'>{subject}</p>
+          <p className='font-medium text-lg w-auto'>{subject}</p>
         </div>
       </div>
       <div className='font-medium text-lg tracking-tight'>

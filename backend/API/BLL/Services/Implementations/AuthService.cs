@@ -40,7 +40,12 @@ public class AuthService : IAuthService
         {
             Token = token, 
             Id = user!.Id, 
-            Email = user.Email! 
+            Email = user.Email!,
+            Name = user.Name,
+            Surname = user.Name,
+            Country = user.Country,
+            City = user.City,
+            Bio = user.Bio
         };
     }
 

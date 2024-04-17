@@ -7,3 +7,9 @@ body {
   margin: 0;
   padding: 0;
 }
+
+/* ::selection {
+  background-color: #f3e8ff;
+  color: #000;
+}
+ */

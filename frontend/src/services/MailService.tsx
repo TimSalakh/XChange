@@ -3,7 +3,7 @@ import axios from 'axios'
 import { handleError } from './ErrorService'
 import { LetterDataModel } from '../models/LetterModels'
 
-const baseApiUrl = 'https://localhost:8888/api/xchangemail'
+const baseApiUrl = 'http://localhost:8888/api/xchangemail'
 
 const composeApi = async (inputs: ComposeFormInputs, userId: string) => {
   try {
@@ -21,7 +21,7 @@ const composeApi = async (inputs: ComposeFormInputs, userId: string) => {
 const inboxApi = async (userId: string) => {
   try {
     const response = await axios.get<LetterDataModel[]>(
-      `${baseApiUrl}/${userId}/inbox`
+      `${baseApiUrl}/uid=${userId}/inbox`
     )
     return response
   } catch (error) {
@@ -32,7 +32,7 @@ const inboxApi = async (userId: string) => {
 const sentApi = async (userId: string) => {
   try {
     const response = await axios.get<LetterDataModel[]>(
-      `${baseApiUrl}/${userId}/sent`
+      `${baseApiUrl}/uid=${userId}/sent`
     )
     return response
   } catch (error) {
@@ -43,7 +43,7 @@ const sentApi = async (userId: string) => {
 const letterApi = async (letterId: string) => {
   try {
     const response = await axios.get<LetterDataModel>(
-      `${baseApiUrl}/letter/${letterId}`
+      `${baseApiUrl}/letter=${letterId}`
     )
     return response
   } catch (error) {

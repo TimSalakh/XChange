@@ -7,6 +7,7 @@ import { doesUserExistApi } from '../services/UserService'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/Context'
 import { toast } from 'react-toastify'
+import { VscSend } from 'react-icons/vsc'
 
 const validation = Yup.object().shape({
   receiver: Yup.string().required("Receiver's email is required"),
@@ -82,9 +83,12 @@ const Compose = () => {
       </div>
       <button
         type='submit'
-        className='text-center text-gray-500 border-2 border-gray-400 rounded-md h-8 w-24 tracking-tight text-lg font-bold hover:bg-slate-200 transition duration-200 ease-in-out'
+        className='text-center text-gray-500 border-2 border-gray-400 rounded-md h-8 w-24 tracking-tight text-lg font-bold hover:bg-slate-200 transition duration-100 ease-in-out'
       >
-        Send
+        <div className='flex flex-row justify-center items-center'>
+          <span className='mr-2'>Send</span>
+          <VscSend size={20} />
+        </div>
       </button>
     </form>
   )

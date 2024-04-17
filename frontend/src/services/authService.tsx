@@ -3,7 +3,7 @@ import { LoginFormInputs, RegisterFormInputs } from '../models/FormInputsModels'
 import { handleError } from './ErrorService'
 import { UserDataModel } from '../models/UserModels'
 
-const baseApiUrl = 'https://localhost:8888/api/auth'
+const baseApiUrl = 'http://localhost:8888/api/auth'
 
 const loginApi = async (inputs: LoginFormInputs) => {
   try {

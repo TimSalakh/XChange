@@ -48,7 +48,7 @@ const ManageAccountPage = () => {
 
   return (
     <div>
-      <button onClick={() => navigate(`/${user?.id}/inbox`)}>Back</button>
+      <button onClick={() => navigate(`/uid/${user?.id}/inbox`)}>Back</button>
       <form>
         <div>
           <label>Name:</label>

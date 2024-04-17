@@ -17,7 +17,7 @@ public class UserController : Controller
     }
 
     [Authorize]
-    [HttpGet("user-exist/{email}")]
+    [HttpGet("user-exist/user-email={email}")]
     public async Task<IActionResult> DoesUserExist([FromRoute] string email)
     {
         var result = await _userService.DoesUserExistAsync(email);
@@ -25,7 +25,7 @@ public class UserController : Controller
     }
 
     [Authorize]
-    [HttpGet("user-data/{id:guid}")]
+    [HttpGet("user-data/user-id={id:guid}")]
     public async Task<IActionResult> LoadUserData([FromRoute] Guid id)
     {
         var user = await _userService.LoadUserData(id);

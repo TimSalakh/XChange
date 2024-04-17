@@ -69,11 +69,11 @@ export const UserProvider = ({ children }: Props) => {
       'Bearer ' + response.data.token
     axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
     toast.success('Success.')
-    navigate(`/${response.data.id}/inbox`)
+    navigate(`/uid/${response.data.id}/inbox`)
   }
 
   const isLoggedIn = () => {
-    return !!user
+    return !!user?.token
   }
 
   const logout = () => {

@@ -29,24 +29,24 @@ export const router = createBrowserRouter([
         element: <RegisterPage />
       },
       {
-        path: '/:uid',
+        path: '/uid/:uid',
         element: (
           <ProtectedRoute>
             <DashboardPage />
           </ProtectedRoute>
         ),
         children: [
-          { path: '/:uid/inbox', element: <Inbox /> },
-          { path: '/:uid/sent', element: <Sent /> },
+          { path: '/uid/:uid/inbox', element: <Inbox /> },
+          { path: '/uid/:uid/sent', element: <Sent /> },
           {
-            path: '/:uid/letter/:lid',
+            path: '/uid/:uid/letter/:lid',
             element: <LetterOverview />
           },
-          { path: '/:uid/compose', element: <Compose /> }
+          { path: '/uid/:uid/compose', element: <Compose /> }
         ]
       },
       {
-        path: '/:uid/manage-account',
+        path: '/uid/:uid/manage-account',
         element: (
           <ProtectedRoute>
             <ManageAccountPage />

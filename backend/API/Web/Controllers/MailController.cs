@@ -2,7 +2,6 @@
 using API.BLL.DTOs.LetterDTOs;
 using API.BLL.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using System.ComponentModel.DataAnnotations;
 
 namespace Web.API.Web.Controllers;
 
@@ -33,7 +32,7 @@ public class MailController : Controller
     }
 
     [Authorize]
-    [HttpGet("{uid:guid}/inbox")]
+    [HttpGet("uid={uid:guid}/inbox")]
     public async Task<IActionResult> LoadInbox([FromRoute] Guid uid)
     {
         var inbox = await _mailService.LoadInboxAsync(uid);
@@ -41,7 +40,7 @@ public class MailController : Controller
     }
 
     [Authorize]
-    [HttpGet("{uid:guid}/sent")]
+    [HttpGet("uid={uid:guid}/sent")]
     public async Task<IActionResult> LoadSent([FromRoute] Guid uid)
     {
         var sent = await _mailService.LoadSentAsync(uid);
@@ -49,7 +48,7 @@ public class MailController : Controller
     }
 
     [Authorize]
-    [HttpGet("letter/{lid:guid}")]
+    [HttpGet("letter={lid:guid}")]
     public async Task<IActionResult> LoadLetter([FromRoute] Guid lid)
     {
         var letter = await _mailService.LoadLetter(lid);

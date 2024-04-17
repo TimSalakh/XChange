@@ -41,7 +41,7 @@ const LetterOverview = () => {
         <div className='mb-5'>
           <p>{letter?.subject}</p>
         </div>
-        <div>
+        <div id='letter-overview'>
           <p>{letter?.body}</p>
         </div>
       </div>
