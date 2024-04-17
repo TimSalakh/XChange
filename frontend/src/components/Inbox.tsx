@@ -32,6 +32,7 @@ const Inbox = () => {
           <LetterPreview
             key={letter.id}
             id={letter.id}
+            status={letter.status}
             target={letter.sender}
             subject={letter.subject}
             date={letter.date}

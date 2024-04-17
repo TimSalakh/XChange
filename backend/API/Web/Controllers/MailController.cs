@@ -54,4 +54,12 @@ public class MailController : Controller
         var letter = await _mailService.LoadLetter(lid);
         return Ok(letter);
     }
+
+    //[Authorize]
+    //[HttpGet("letter={lid:guid}")]
+    //public async Task<IActionResult> LoadLetter([FromRoute] Guid lid)
+    //{
+    //    var letter = await _mailService.LoadLetter(lid);
+    //    return Ok(letter);
+    //}
 }

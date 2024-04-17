@@ -19,5 +19,9 @@ internal class LetterConfiguration : IEntityTypeConfiguration<Letter>
             .HasOne(l => l.Receiver)
             .WithMany(u => u.Received)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder
+            .Property(l => l.Status)
+            .HasDefaultValue(false);
     }
 }

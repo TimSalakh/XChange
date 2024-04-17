@@ -32,6 +32,7 @@ const Sent = () => {
           <LetterPreview
             key={letter.id}
             id={letter.id}
+            status={letter.status}
             target={letter.receiver}
             subject={letter.subject}
             date={letter.date}

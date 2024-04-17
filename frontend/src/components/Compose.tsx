@@ -33,7 +33,7 @@ const Compose = () => {
     }
     await composeApi(form, user!.id)
     toast.success('Letter sent.')
-    navigate(`/${user!.id}/inbox`)
+    navigate(`/uid/${user!.id}/inbox`)
   }
 
   return (

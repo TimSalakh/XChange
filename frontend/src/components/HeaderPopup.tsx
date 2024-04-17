@@ -23,14 +23,14 @@ const HeaderPopup = () => {
         {user?.email}
       </button>
       {isOpen && (
-        <div className='absolute z-1 right-39 mt-2 w-48 bg-white rounded-md shadow-xl border-2 border-slate-200 flex flex-col items-start text-lg'>
+        <div className='absolute z-1 right-25 mt-2 w-auto bg-white rounded-md shadow-xl border-2 border-slate-200 flex flex-col items-start text-lg'>
           <button
             onClick={() => navigate(`/uid/${user!.id}/manage-account`)}
             className='hover:bg-slate-200 w-full h-wull flex flex-row justify-start items-center px-3 py-2'
           >
             <div className='flex flex-row justify-center items-center'>
               <VscAccount size={20} />
-              <span className='ml-2'>Manage account</span>
+              <span className='ml-3'>Manage account</span>
             </div>
           </button>
           <button
@@ -39,7 +39,7 @@ const HeaderPopup = () => {
           >
             <div className='flex flex-row justify-center items-center'>
               <VscSignOut size={20} />
-              <span className='ml-2'>Logout</span>
+              <span className='ml-3'>Logout</span>
             </div>
           </button>
         </div>
