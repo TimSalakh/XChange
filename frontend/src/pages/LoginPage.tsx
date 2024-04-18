@@ -55,6 +55,7 @@ const LoginPage = () => {
               className='placeholder-gray-400 text-xl h-10 my-3 p-2 pb-3 focus:outline-none border-b-2 border-gray-200 focus:border-gray-500 w-full'
               type={`${showPassword ? 'text' : 'password'}`}
               placeholder='Enter your password here'
+              autoComplete='off'
               {...register('password')}
             />
             <button

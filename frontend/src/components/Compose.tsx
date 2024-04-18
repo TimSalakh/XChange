@@ -45,6 +45,7 @@ const Compose = () => {
         <input
           className='w-72 border-b-2 border-b-gray-400 text-xl p-1    focus:outline-transparent'
           placeholder="Receiver's email"
+          autoComplete='off'
           {...register('receiver')}
         />
         {errors.receiver ? (
@@ -59,6 +60,7 @@ const Compose = () => {
         <input
           className='w-72 border-b-2 border-b-gray-400 text-xl p-1 focus:outline-transparent'
           placeholder='Subject'
+          autoComplete='off'
           {...register('subject')}
         />
         {errors.subject ? (

@@ -46,6 +46,7 @@ const RegisterPage = () => {
           <input
             className='placeholder-gray-400 text-xl h-10 my-3 p-2 pb-3 focus:outline-none border-b-2 border-gray-200 focus:border-gray-500'
             placeholder='Enter your name here'
+            autoComplete='off'
             {...register('name')}
           />
           {errors.name ? (
@@ -56,6 +57,7 @@ const RegisterPage = () => {
           <input
             className='placeholder-gray-400 text-xl h-10 my-3 p-2 pb-3 focus:outline-none border-b-2 border-gray-200 focus:border-gray-500'
             placeholder='Enter your surname here'
+            autoComplete='off'
             {...register('surname')}
           />
           {errors.surname ? (
@@ -67,6 +69,7 @@ const RegisterPage = () => {
             <input
               className='placeholder-gray-400 text-xl h-10 my-3 p-2 pb-3 focus:outline-none border-b-2 border-gray-200 focus:border-gray-500 w-full'
               placeholder='Enter your email prefix here'
+              autoComplete='off'
               {...register('email')}
             />
             <p className='ml-2 pb-2 text-2xl font-medium tracking-wide text-gray-600'>
@@ -83,6 +86,7 @@ const RegisterPage = () => {
               className='placeholder-gray-400 text-xl h-10 my-3 p-2 pb-3 focus:outline-none border-b-2 border-gray-200 focus:border-gray-500 w-full'
               type={`${showPassword ? 'text' : 'password'}`}
               placeholder='Enter your password here'
+              autoComplete='off'
               {...register('password')}
             />
             <button

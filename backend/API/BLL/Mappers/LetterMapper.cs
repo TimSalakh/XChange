@@ -26,7 +26,7 @@ public static class LetterMapper
             Sender = letter.Sender!.Email!,
             ReceiverId = letter.ReceiverId,
             Receiver = letter.Receiver!.Email!,
-            Status = letter.Status,
+            IsRead = letter.IsRead,
             Date = letter.Date.ToString("dd.MM.yy HH:mm"),
             Subject = letter.Subject,
             Body = letter.Body

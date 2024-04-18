@@ -44,4 +44,10 @@ public class LetterRepository : ILetterRepository
             .Include(l => l.Receiver)
             .FirstOrDefaultAsync(l => l.Id == id);
     }
+
+    public async Task UpdateAsync(Letter letter)
+    {
+        _context.Letter.Update(letter);
+        await _context.SaveChangesAsync();
+    }
 }

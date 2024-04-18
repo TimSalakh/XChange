@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { inboxApi } from '../services/MailService'
 import { LetterDataModel } from '../models/LetterModels'
 import { handleError } from '../services/ErrorService'
-import LetterPreview from './LetterPreview'
+import InboxLetterPreview from './InboxLetterPreview'
 import { useAuth } from '../context/Context'
 
 const Inbox = () => {
@@ -29,10 +29,10 @@ const Inbox = () => {
         </div>
       ) : (
         inbox.map((letter) => (
-          <LetterPreview
+          <InboxLetterPreview
             key={letter.id}
             id={letter.id}
-            status={letter.status}
+            isRead={letter.isRead}
             target={letter.sender}
             subject={letter.subject}
             date={letter.date}

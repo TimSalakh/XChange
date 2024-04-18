@@ -44,7 +44,7 @@ export const UserProvider = ({ children }: Props) => {
     await loginApi(inputs)
       .then((response) => {
         if (response?.status === 200) {
-          handleResponse(response)
+          handleResponse(response, 'Login success.')
         }
       })
       .catch((error) => toast.warning(error))
@@ -54,21 +54,22 @@ export const UserProvider = ({ children }: Props) => {
     await registerApi(inputs)
       .then((response) => {
         if (response?.status === 200) {
-          handleResponse(response)
+          handleResponse(response, 'Register success.')
         }
       })
       .catch((error) => toast.warning(error))
   }
 
   const handleResponse = (
-    response: AxiosResponse<UserDataModel, any>
+    response: AxiosResponse<UserDataModel, any>,
+    message: string
   ): void => {
     localStorage.setItem('user', JSON.stringify(response.data))
     setUser(response.data)
     axios.defaults.headers.common['Authorization'] =
       'Bearer ' + response.data.token
     axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
-    toast.success('Success.')
+    toast.success(message)
     navigate(`/uid/${response.data.id}/inbox`)
   }
 

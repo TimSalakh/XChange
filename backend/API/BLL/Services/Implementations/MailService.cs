@@ -5,7 +5,7 @@ using API.BLL.DTOs.LetterDTOs;
 using API.BLL.Mappers;
 using API.BLL.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
-using API.BLL.DTOs.UserDTOs;
+using System.Threading;
 
 namespace API.BLL.Services.Implementations;
 
@@ -66,9 +66,16 @@ public class MailService : IMailService
         return sent;
     }
 
-    public async Task<DisplayLetterDto> LoadLetter(Guid letterId)
+    public async Task<DisplayLetterDto> LoadLetterAsync(Guid letterId)
     {
         var letter = await _letterRepository.GetByIdAsync(letterId);
         return letter!.ToDisplayLetterDto();
+    }
+
+    public async Task ChangeIsReadAsync(Guid letterId)
+    {
+        var letter = await _letterRepository.GetByIdAsync(letterId);
+        letter!.IsRead = !letter.IsRead;
+        await _letterRepository.UpdateAsync(letter);
     }
 }

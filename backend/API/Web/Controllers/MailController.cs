@@ -51,15 +51,15 @@ public class MailController : Controller
     [HttpGet("letter={lid:guid}")]
     public async Task<IActionResult> LoadLetter([FromRoute] Guid lid)
     {
-        var letter = await _mailService.LoadLetter(lid);
+        var letter = await _mailService.LoadLetterAsync(lid);
         return Ok(letter);
     }
 
-    //[Authorize]
-    //[HttpGet("letter={lid:guid}")]
-    //public async Task<IActionResult> LoadLetter([FromRoute] Guid lid)
-    //{
-    //    var letter = await _mailService.LoadLetter(lid);
-    //    return Ok(letter);
-    //}
+    [Authorize]
+    [HttpGet("change-is-read-status/letter={lid:guid}")]
+    public async Task<IActionResult> ChangeIsReadStatus([FromRoute] Guid lid)
+    {
+        await _mailService.ChangeIsReadAsync(lid);
+        return Ok();
+    }
 }

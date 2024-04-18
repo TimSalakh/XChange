@@ -1,15 +1,13 @@
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/Context'
-import { useState } from 'react'
 
-const LetterPreview = (props: {
+const SentLetterPreview = (props: {
   id: string
-  status: boolean
   target: string
   subject: string
   date: string
 }) => {
-  const { id, status, target, subject, date } = props
+  const { id, target, subject, date } = props
   const navigate = useNavigate()
   const { user } = useAuth()
 
@@ -33,4 +31,4 @@ const LetterPreview = (props: {
   )
 }
 
-export default LetterPreview
+export default SentLetterPreview

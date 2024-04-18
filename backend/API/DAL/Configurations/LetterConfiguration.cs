@@ -21,7 +21,7 @@ internal class LetterConfiguration : IEntityTypeConfiguration<Letter>
             .OnDelete(DeleteBehavior.Restrict);
 
         builder
-            .Property(l => l.Status)
+            .Property(l => l.IsRead)
             .HasDefaultValue(false);
     }
 }

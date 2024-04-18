@@ -51,4 +51,12 @@ const letterApi = async (letterId: string) => {
   }
 }
 
-export { composeApi, inboxApi, sentApi, letterApi }
+const changeIsReadApi = async (letterId: string) => {
+  try {
+    await axios.get(`${baseApiUrl}/change-is-read-status/letter=${letterId}`)
+  } catch (error) {
+    handleError(error)
+  }
+}
+
+export { composeApi, inboxApi, sentApi, letterApi, changeIsReadApi }

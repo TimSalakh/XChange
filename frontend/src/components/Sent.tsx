@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { sentApi } from '../services/MailService'
 import { LetterDataModel } from '../models/LetterModels'
 import { handleError } from '../services/ErrorService'
-import LetterPreview from './LetterPreview'
+import SentLetterPreview from './SentLetterPreview'
 import { useAuth } from '../context/Context'
 
 const Sent = () => {
@@ -29,10 +29,9 @@ const Sent = () => {
         </div>
       ) : (
         sent.map((letter) => (
-          <LetterPreview
+          <SentLetterPreview
             key={letter.id}
             id={letter.id}
-            status={letter.status}
             target={letter.receiver}
             subject={letter.subject}
             date={letter.date}

@@ -8,7 +8,6 @@ import LetterSenderPopup from './LetterSenderPopup'
 const LetterOverview = () => {
   const { lid } = useParams<{ lid?: string }>()
   const [letter, setLetter] = useState<LetterDataModel | null>(null)
-  const [isLoaded, setIsLoaded] = useState<boolean>(false)
 
   useEffect(() => {
     const fetchLetter = async () => {
@@ -37,7 +36,7 @@ const LetterOverview = () => {
         </p>
         <div className='h-auto w-auto'>{letter?.date}</div>
       </div>
-      <div>
+      <div className='px-1'>
         <div className='mb-5'>
           <p>{letter?.subject}</p>
         </div>
