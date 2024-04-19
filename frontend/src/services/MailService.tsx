@@ -59,4 +59,32 @@ const changeIsReadApi = async (letterId: string) => {
   }
 }
 
-export { composeApi, inboxApi, sentApi, letterApi, changeIsReadApi }
+const changeIsDeletedByReceiverApi = async (letterId: string) => {
+  try {
+    await axios.get(
+      `${baseApiUrl}/change-is-deleted-by-receiver-status/letter=${letterId}`
+    )
+  } catch (error) {
+    handleError(error)
+  }
+}
+
+const changeIsDeletedBySenderApi = async (letterId: string) => {
+  try {
+    await axios.get(
+      `${baseApiUrl}/change-is-deleted-by-sender-status/letter=${letterId}`
+    )
+  } catch (error) {
+    handleError(error)
+  }
+}
+
+export {
+  composeApi,
+  inboxApi,
+  sentApi,
+  letterApi,
+  changeIsReadApi,
+  changeIsDeletedByReceiverApi,
+  changeIsDeletedBySenderApi
+}

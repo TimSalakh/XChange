@@ -23,5 +23,13 @@ internal class LetterConfiguration : IEntityTypeConfiguration<Letter>
         builder
             .Property(l => l.IsRead)
             .HasDefaultValue(false);
+
+        builder
+            .Property(l => l.IsDeletedByReceiver)
+            .HasDefaultValue(false);
+
+        builder
+            .Property(l => l.IsDeletedBySender)
+            .HasDefaultValue(false);
     }
 }

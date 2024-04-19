@@ -3,45 +3,75 @@ import { useAuth } from '../context/Context'
 import { changeIsReadApi } from '../services/MailService'
 import { handleError } from '../services/ErrorService'
 import { UnreadMark, ReadMark } from './LetterStatusMark'
+import { DefaultCheckbox, SelectedCheckbox } from './LetterCheckbox'
+import { useEffect, useState } from 'react'
 
 const InboxLetterPreview = (props: {
-  id: string
+  letterId: string
   isRead: boolean
-  target: string
+  senderId: string
+  sender: string
   subject: string
   date: string
+  action: (isActive: boolean, letterId: string, senderId: string) => void
 }) => {
-  const { id, isRead, target, subject, date } = props
+  const { letterId, isRead, senderId, sender, subject, date, action } = props
   const navigate = useNavigate()
   const { user } = useAuth()
+  const [isCheckboxSelected, setIsCheckboxSelected] = useState<boolean>(false)
 
   const changeIsReadStatus = async () => {
     try {
-      await changeIsReadApi(id)
+      await changeIsReadApi(letterId)
     } catch (error) {
       handleError(error)
     }
   }
 
+  useEffect(() => {
+    action(isCheckboxSelected, letterId, senderId)
+  }, [isCheckboxSelected])
+
+  const handleLetterClick = () => {
+    if (!isRead) {
+      changeIsReadStatus()
+    }
+    navigate(`/uid/${user!.id}/letter/${letterId}`)
+  }
+
   return (
-    <div
-      onClick={() => {
-        if (!isRead) {
-          changeIsReadStatus()
-        }
-        navigate(`/uid/${user!.id}/letter/${id}`)
-      }}
-      className='w-full h-10 flex flex-row justify-between items-center rounded-lg bg-white border border-slate-200 py-2 px-3 mb-2 hover:bg-slate-200 transition duration-100 ease-in-out shadow-sm'
-    >
-      <div className='w-7/12 flex flex-row justify-between items-center'>
+    <tr className='w-full h-12 bg-white border border-slate-200 flex flex-row'>
+      <td
+        onClick={() => setIsCheckboxSelected(!isCheckboxSelected)}
+        className='h-full w-1/12 flex flex-row justify-start items-center pl-3'
+      >
+        {isCheckboxSelected ? <SelectedCheckbox /> : <DefaultCheckbox />}
+      </td>
+      <td
+        className='h-full w-1/12 flex flex-row justify-start items-center'
+        onClick={() => handleLetterClick()}
+      >
         {isRead ? <ReadMark /> : <UnreadMark />}
-        <div className='flex w-5/6 h-full flex-row justify-between items-center'>
-          <div className='font-medium text-lg w-auto'>{target}</div>
-          <div className='font-medium text-lg w-auto'>{subject}</div>
-        </div>
-      </div>
-      <div className='font-medium text-lg tracking-tight'>{date}</div>
-    </div>
+      </td>
+      <td
+        className='h-full w-3/12 flex flex-row justify-start items-center text-lg cursor-default'
+        onClick={() => handleLetterClick()}
+      >
+        {sender}
+      </td>
+      <td
+        className='h-full w-5/12 flex flex-row justify-start items-center text-lg cursor-default'
+        onClick={() => handleLetterClick()}
+      >
+        {subject}
+      </td>
+      <td
+        className='h-full w-2/12 flex flex-row justify-end items-center pr-3 text-lg text-gray-400 cursor-default'
+        onClick={() => handleLetterClick()}
+      >
+        {date}
+      </td>
+    </tr>
   )
 }
 

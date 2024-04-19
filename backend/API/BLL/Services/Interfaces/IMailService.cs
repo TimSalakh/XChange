@@ -9,4 +9,6 @@ public interface IMailService
     Task<IEnumerable<DisplayLetterDto>> LoadSentAsync(Guid userId);
     Task<DisplayLetterDto> LoadLetterAsync(Guid letterId);
     Task ChangeIsReadAsync(Guid letterId);
+    Task ChangeIsDeletedByReceiverAsync(Guid letterId);
+    Task ChangeIsDeletedBySenderAsync(Guid letterId);
 }

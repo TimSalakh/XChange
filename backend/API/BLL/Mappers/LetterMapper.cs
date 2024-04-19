@@ -26,10 +26,12 @@ public static class LetterMapper
             Sender = letter.Sender!.Email!,
             ReceiverId = letter.ReceiverId,
             Receiver = letter.Receiver!.Email!,
-            IsRead = letter.IsRead,
             Date = letter.Date.ToString("dd.MM.yy HH:mm"),
             Subject = letter.Subject,
-            Body = letter.Body
+            Body = letter.Body,
+            IsRead = letter.IsRead,
+            IsDeletedByReceiver = letter.IsDeletedByReceiver,
+            IsDeletedBySender = letter.IsDeletedBySender
         };
     }
 }

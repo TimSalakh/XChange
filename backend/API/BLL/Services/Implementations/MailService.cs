@@ -5,7 +5,6 @@ using API.BLL.DTOs.LetterDTOs;
 using API.BLL.Mappers;
 using API.BLL.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
-using System.Threading;
 
 namespace API.BLL.Services.Implementations;
 
@@ -42,7 +41,7 @@ public class MailService : IMailService
         IQueryable<Letter> letters = await _letterRepository.GetAllAsync();
 
         var received = letters
-            .Where(l => l.ReceiverId == userId)
+            .Where(l => l.ReceiverId == userId && !l.IsDeletedByReceiver)
             .Include(l => l.Sender)
             .Include(l => l.Receiver)
             .OrderByDescending(l => l.Date)
@@ -57,7 +56,7 @@ public class MailService : IMailService
         IQueryable<Letter> letters = await _letterRepository.GetAllAsync();
 
         var sent = letters
-            .Where(l => l.SenderId == userId)
+            .Where(l => l.SenderId == userId && !l.IsDeletedBySender)
             .Include(l => l.Sender)
             .Include(l => l.Receiver)
             .OrderByDescending(l => l.Date)
@@ -76,6 +75,20 @@ public class MailService : IMailService
     {
         var letter = await _letterRepository.GetByIdAsync(letterId);
         letter!.IsRead = !letter.IsRead;
+        await _letterRepository.UpdateAsync(letter);
+    }
+
+    public async Task ChangeIsDeletedByReceiverAsync(Guid letterId)
+    {
+        var letter = await _letterRepository.GetByIdAsync(letterId);
+        letter!.IsDeletedByReceiver = !letter.IsDeletedByReceiver;
+        await _letterRepository.UpdateAsync(letter);
+    }
+
+    public async Task ChangeIsDeletedBySenderAsync(Guid letterId)
+    {
+        var letter = await _letterRepository.GetByIdAsync(letterId);
+        letter!.IsDeletedBySender = !letter.IsDeletedBySender;
         await _letterRepository.UpdateAsync(letter);
     }
 }

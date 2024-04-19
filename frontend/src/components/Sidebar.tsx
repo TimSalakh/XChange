@@ -1,7 +1,13 @@
 import { Link } from 'react-router-dom'
 import { useAuth } from '../context/Context'
 import { useState } from 'react'
-import { VscEdit, VscInbox, VscSend } from 'react-icons/vsc'
+import {
+  VscEdit,
+  VscInbox,
+  VscSend,
+  VscTrash,
+  VscArchive
+} from 'react-icons/vsc'
 
 const Sidebar = () => {
   const { user } = useAuth()
@@ -46,6 +52,34 @@ const Sidebar = () => {
           <div className='flex flex-row justify-center items-center'>
             <VscSend size={20} />
             <span className='ml-2'>Sent</span>
+          </div>
+        </Link>
+      </div>
+      <div className='flex flex-row justify-center items-center w-full'>
+        <Link
+          className={`text-start font-bold text-xl text-black w-full rounded-md tracking-tight py-1 pl-2 mb-2 hover:bg-slate-200 transition duration-200 ease-in-out flex flex-row justify-start items-center ${
+            option === 'qweqwe' ? 'bg-slate-200' : ''
+          }`}
+          to={`/uid/${user!.id}/sent`}
+          onClick={() => setOption('sent')}
+        >
+          <div className='flex flex-row justify-center items-center'>
+            <VscArchive size={20} />
+            <span className='ml-2'>Spam</span>
+          </div>
+        </Link>
+      </div>
+      <div className='flex flex-row justify-center items-center w-full'>
+        <Link
+          className={`text-start font-bold text-xl text-black w-full rounded-md tracking-tight py-1 pl-2 mb-2 hover:bg-slate-200 transition duration-200 ease-in-out flex flex-row justify-start items-center ${
+            option === 'qweqwe' ? 'bg-slate-200' : ''
+          }`}
+          to={`/uid/${user!.id}/sent`}
+          onClick={() => setOption('sent')}
+        >
+          <div className='flex flex-row justify-center items-center'>
+            <VscTrash size={20} />
+            <span className='ml-2'>Bin</span>
           </div>
         </Link>
       </div>

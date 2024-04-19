@@ -62,4 +62,20 @@ public class MailController : Controller
         await _mailService.ChangeIsReadAsync(lid);
         return Ok();
     }
+
+    [Authorize]
+    [HttpGet("change-is-deleted-by-receiver-status/letter={lid:guid}")]
+    public async Task<IActionResult> ChangeIsDeletedByReceiverStatus([FromRoute] Guid lid)
+    {
+        await _mailService.ChangeIsDeletedByReceiverAsync(lid);
+        return Ok();
+    }
+
+    [Authorize]
+    [HttpGet("change-is-deleted-by-sender-status/letter={lid:guid}")]
+    public async Task<IActionResult> ChangeIsDeletedBySenderStatus([FromRoute] Guid lid)
+    {
+        await _mailService.ChangeIsDeletedBySenderAsync(lid);
+        return Ok();
+    }
 }

@@ -4,8 +4,10 @@ export type LetterDataModel = {
   sender: string
   receiverId: string
   receiver: string
-  isRead: boolean
   body: string
   subject: string
   date: string
+  isRead: boolean
+  isDeletedByReceiver: boolean
+  isDeletedBySender: boolean
 }
