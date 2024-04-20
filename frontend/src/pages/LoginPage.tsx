@@ -42,7 +42,7 @@ const LoginPage = () => {
         <form className='flex flex-col' onSubmit={handleSubmit(handleLogin)}>
           <input
             className='placeholder-gray-400 text-xl h-10 my-3 p-2 pb-3 focus:outline-none border-b-2 border-gray-200 focus:border-gray-500'
-            placeholder='Enter your email here'
+            placeholder='Your email'
             {...register('email')}
           />
           {errors.email ? (
@@ -54,7 +54,7 @@ const LoginPage = () => {
             <input
               className='placeholder-gray-400 text-xl h-10 my-3 p-2 pb-3 focus:outline-none border-b-2 border-gray-200 focus:border-gray-500 w-full'
               type={`${showPassword ? 'text' : 'password'}`}
-              placeholder='Enter your password here'
+              placeholder='Your password'
               autoComplete='off'
               {...register('password')}
             />

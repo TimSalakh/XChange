@@ -1,65 +1,74 @@
 import { useEffect, useState } from 'react'
-import { sentApi, changeIsDeletedBySenderApi } from '../services/MailService'
 import { LetterDataModel } from '../models/LetterModels'
 import { handleError } from '../services/ErrorService'
-import SentLetterPreview from './SentLetterPreview'
+import SpamLetterPreview from './SpamLetterPreview'
 import { useAuth } from '../context/Context'
+import { VscDiscard } from 'react-icons/vsc'
 import { toast } from 'react-toastify'
-import { VscTrash } from 'react-icons/vsc'
+import { spamApi, removeFromSpamApi } from '../services/MailService'
 
-const Sent = () => {
-  const [sent, setSent] = useState<LetterDataModel[]>([])
+const Spam = () => {
+  const [spam, setSpam] = useState<LetterDataModel[]>([])
   const { user } = useAuth()
   const [isBarActive, setIsBarActive] = useState<boolean>(false)
   const [letterId, setLetterId] = useState<string>('')
+  const [receiverId, setReceiverId] = useState<string>('')
+  const [senderId, setSenderId] = useState<string>('')
   const [searchText, setSearchText] = useState<string>('')
 
   useEffect(() => {
-    const fetchSent = async () => {
+    const fetchSpam = async () => {
       try {
-        const response = await sentApi(user!.id)
-        setSent(response!.data)
+        const response = await spamApi(user!.id)
+        setSpam(response!.data)
       } catch (error) {
         handleError(error)
       }
     }
-    fetchSent()
+    fetchSpam()
   }, [user])
 
-  const checkboxHandler = (isActive: boolean, letterId: string) => {
+  const checkboxHandler = (
+    isActive: boolean,
+    letterId: string,
+    receiverId: string,
+    senderId: string
+  ) => {
     setIsBarActive(isActive)
     setLetterId(letterId)
+    setReceiverId(receiverId)
+    setSenderId(senderId)
   }
 
-  const handleBinClick = async () => {
+  const handleRemoveFromSpamClick = async () => {
     try {
-      await changeIsDeletedBySenderApi(letterId)
-      await updateSent()
-      toast.success('Moved to bin.')
+      await removeFromSpamApi(receiverId, senderId)
+      await updateSpam()
+      toast.success('Removed from spam.')
     } catch (error) {
       handleError(error)
     }
   }
 
-  const updateSent = async () => {
+  const updateSpam = async () => {
     try {
-      const response = await sentApi(user!.id)
-      setSent(response!.data)
+      const response = await spamApi(user!.id)
+      setSpam(response!.data)
     } catch (error) {
       handleError(error)
     }
   }
 
-  const filteredSent = sent.filter(
+  const filteredSpam = spam.filter(
     (letter) =>
       letter.subject.toLowerCase().includes(searchText.toLowerCase()) ||
       letter.body.toLowerCase().includes(searchText.toLowerCase()) ||
-      letter.receiver.toLowerCase().includes(searchText.toLowerCase())
+      letter.sender.toLowerCase().includes(searchText.toLowerCase())
   )
 
-  return sent.length === 0 ? (
+  return spam.length === 0 ? (
     <div className='h-full w-full font-medium text-4xl tracking-tight flex flex-row justify-center items-center text-slate-300'>
-      No sent letters
+      No letters in spam
     </div>
   ) : (
     <div className='overflow-y-auto max-h-[700px]'>
@@ -68,18 +77,18 @@ const Sent = () => {
           <td className='w-auto h-full flex flex-row justify-center items-center pl-2'>
             <button
               disabled={!isBarActive}
-              onClick={() => handleBinClick()}
+              onClick={() => handleRemoveFromSpamClick()}
               className={`flex flex-row justify-between items-center text-lg rounded-md px-3 py-0.5 ${
                 isBarActive
-                  ? 'bg-red-100 text-red-600 hover:bg-red-200 transition duration-100 ease-in-out'
+                  ? 'bg-green-100 text-green-600 hover:bg-green-200 transition duration-100 ease-in-out'
                   : ' bg-gray-100 text-gray-400'
               }`}
             >
-              Move to bin
-              <VscTrash
+              Remove from spam
+              <VscDiscard
                 className='ml-2'
                 size={20}
-                color={`${isBarActive ? '#dc2626' : '#9ca3af'}`}
+                color={`${isBarActive ? '#16a34a' : '#9ca3af'}`}
               />
             </button>
           </td>
@@ -92,12 +101,14 @@ const Sent = () => {
             />
           </td>
         </thead>
-        {filteredSent.map((letter) => (
-          <SentLetterPreview
+        {filteredSpam.map((letter) => (
+          <SpamLetterPreview
             key={letter.id}
             letterId={letter.id}
             receiverId={letter.receiverId}
             receiver={letter.receiver}
+            senderId={letter.senderId}
+            sender={letter.sender}
             subject={letter.subject}
             date={letter.date}
             action={checkboxHandler}
@@ -108,4 +119,4 @@ const Sent = () => {
   )
 }
 
-export default Sent
+export default Spam

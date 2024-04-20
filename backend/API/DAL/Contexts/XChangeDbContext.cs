@@ -1,5 +1,6 @@
 ﻿using API.DAL.Configurations;
 using API.DAL.Entites;
+using API.DAL.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +11,7 @@ public class XChangeDbContext :
 {
     public DbSet<User> User { get; set; }
     public DbSet<Letter> Letter { get; set; }
+    public DbSet<Spam> Spam { get; set; }
 
     public XChangeDbContext(DbContextOptions<XChangeDbContext> options)
         : base(options) { }
@@ -19,5 +21,6 @@ public class XChangeDbContext :
         base.OnModelCreating(builder);
         builder.ApplyConfiguration(new UserConfiguration());
         builder.ApplyConfiguration(new LetterConfiguration());
+        builder.ApplyConfiguration(new SpamConfiguration());
     }
 }

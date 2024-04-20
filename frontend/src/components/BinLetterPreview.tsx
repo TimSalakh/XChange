@@ -1,34 +1,29 @@
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/Context'
-import { changeIsReadApi } from '../services/MailService'
-import { handleError } from '../services/ErrorService'
-import { UnreadMark, ReadMark } from './LetterStatusMark'
 import { DefaultCheckbox, SelectedCheckbox } from './LetterCheckbox'
 import { useEffect, useState } from 'react'
 
-const InboxLetterPreview = (props: {
+const BinLetterPreview = (props: {
   letterId: string
-  isRead: boolean
-  receiverId: string
-  receiver: string
   senderId: string
   sender: string
+  receiverId: string
+  receiver: string
   subject: string
   date: string
   action: (
     isActive: boolean,
     letterId: string,
-    receiverId: string,
-    senderId: string
+    senderId: string,
+    receiverId: string
   ) => void
 }) => {
   const {
     letterId,
-    isRead,
-    receiverId,
-    receiver,
     senderId,
     sender,
+    receiverId,
+    receiver,
     subject,
     date,
     action
@@ -37,22 +32,11 @@ const InboxLetterPreview = (props: {
   const { user } = useAuth()
   const [isCheckboxSelected, setIsCheckboxSelected] = useState<boolean>(false)
 
-  const changeIsReadStatus = async () => {
-    try {
-      await changeIsReadApi(letterId)
-    } catch (error) {
-      handleError(error)
-    }
-  }
-
   useEffect(() => {
-    action(isCheckboxSelected, letterId, receiverId, senderId)
+    action(isCheckboxSelected, letterId, senderId, receiverId)
   }, [isCheckboxSelected])
 
   const handleLetterClick = () => {
-    if (!isRead) {
-      changeIsReadStatus()
-    }
     navigate(`/uid/${user!.id}/letter/${letterId}`)
   }
 
@@ -65,19 +49,18 @@ const InboxLetterPreview = (props: {
         {isCheckboxSelected ? <SelectedCheckbox /> : <DefaultCheckbox />}
       </td>
       <td
-        className='h-full w-1/12 flex flex-row justify-start items-center'
+        className='h-full w-6/12 flex flex-row justify-start items-center text-lg cursor-default'
         onClick={() => handleLetterClick()}
       >
-        {isRead ? <ReadMark /> : <UnreadMark />}
+        <span>
+          <span className='italic mr-1 text-base'>from:</span> {sender}
+        </span>
+        <span className='ml-10'>
+          <span className='italic mr-1 text-base'>to:</span> {receiver}
+        </span>
       </td>
       <td
-        className='h-full w-4/12 flex flex-row justify-start items-center text-lg cursor-default pl-3'
-        onClick={() => handleLetterClick()}
-      >
-        <span className='italic mr-1 text-base'>from:</span> {sender}
-      </td>
-      <td
-        className='h-full w-4/12 flex flex-row justify-start items-center text-lg cursor-default'
+        className='h-full w-3/12 flex flex-row justify-start items-center text-lg cursor-default'
         onClick={() => handleLetterClick()}
       >
         {subject}
@@ -92,4 +75,4 @@ const InboxLetterPreview = (props: {
   )
 }
 
-export default InboxLetterPreview
+export default BinLetterPreview

@@ -2,6 +2,7 @@
 using API.BLL.DTOs.LetterDTOs;
 using API.BLL.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using API.BLL.DTOs.SpamSTOs;
 
 namespace Web.API.Web.Controllers;
 
@@ -48,6 +49,22 @@ public class MailController : Controller
     }
 
     [Authorize]
+    [HttpGet("uid={uid:guid}/bin")]
+    public async Task<IActionResult> LoadBin([FromRoute] Guid uid)
+    {
+        var bin = await _mailService.LoadBinAsync(uid);
+        return Ok(bin);
+    }
+
+    [Authorize]
+    [HttpGet("uid={uid:guid}/spam")]
+    public async Task<IActionResult> LoadSpam([FromRoute] Guid uid)
+    {
+        var spam = await _mailService.LoadSpamAsync(uid);
+        return Ok(spam);
+    }
+
+    [Authorize]
     [HttpGet("letter={lid:guid}")]
     public async Task<IActionResult> LoadLetter([FromRoute] Guid lid)
     {
@@ -76,6 +93,22 @@ public class MailController : Controller
     public async Task<IActionResult> ChangeIsDeletedBySenderStatus([FromRoute] Guid lid)
     {
         await _mailService.ChangeIsDeletedBySenderAsync(lid);
+        return Ok();
+    }
+
+    [Authorize]
+    [HttpPost("add-to-spam")]
+    public async Task<IActionResult> AddToSpam([FromBody] SpamDto spamDto)
+    {
+        await _mailService.AddToSpamAsync(spamDto);
+        return Ok();
+    }
+
+    [Authorize]
+    [HttpPost("remove-from-spam")]
+    public async Task<IActionResult> RemoveFromSpam([FromBody] SpamDto spamDto)
+    {
+        await _mailService.RemoveFromSpamAsync(spamDto);
         return Ok();
     }
 }

@@ -6,9 +6,8 @@ import { UnreadMark, ReadMark } from './LetterStatusMark'
 import { DefaultCheckbox, SelectedCheckbox } from './LetterCheckbox'
 import { useEffect, useState } from 'react'
 
-const InboxLetterPreview = (props: {
+const SpamLetterPreview = (props: {
   letterId: string
-  isRead: boolean
   receiverId: string
   receiver: string
   senderId: string
@@ -24,7 +23,6 @@ const InboxLetterPreview = (props: {
 }) => {
   const {
     letterId,
-    isRead,
     receiverId,
     receiver,
     senderId,
@@ -37,22 +35,11 @@ const InboxLetterPreview = (props: {
   const { user } = useAuth()
   const [isCheckboxSelected, setIsCheckboxSelected] = useState<boolean>(false)
 
-  const changeIsReadStatus = async () => {
-    try {
-      await changeIsReadApi(letterId)
-    } catch (error) {
-      handleError(error)
-    }
-  }
-
   useEffect(() => {
     action(isCheckboxSelected, letterId, receiverId, senderId)
   }, [isCheckboxSelected])
 
   const handleLetterClick = () => {
-    if (!isRead) {
-      changeIsReadStatus()
-    }
     navigate(`/uid/${user!.id}/letter/${letterId}`)
   }
 
@@ -65,13 +52,7 @@ const InboxLetterPreview = (props: {
         {isCheckboxSelected ? <SelectedCheckbox /> : <DefaultCheckbox />}
       </td>
       <td
-        className='h-full w-1/12 flex flex-row justify-start items-center'
-        onClick={() => handleLetterClick()}
-      >
-        {isRead ? <ReadMark /> : <UnreadMark />}
-      </td>
-      <td
-        className='h-full w-4/12 flex flex-row justify-start items-center text-lg cursor-default pl-3'
+        className='h-full w-5/12 flex flex-row justify-start items-center text-lg cursor-default pl-3'
         onClick={() => handleLetterClick()}
       >
         <span className='italic mr-1 text-base'>from:</span> {sender}
@@ -92,4 +73,4 @@ const InboxLetterPreview = (props: {
   )
 }
 
-export default InboxLetterPreview
+export default SpamLetterPreview

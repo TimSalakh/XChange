@@ -8,8 +8,8 @@ const DefaultCheckbox = () => {
 
 const SelectedCheckbox = () => {
   return (
-    <div className='w-5 h-5 bg-purple-950 rounded-md flex flex-row justify-center items-center cursor-pointer'>
-      <VscCheck size={15} color='white' />
+    <div className='w-5 h-5 bg-white border-2 border-slate-400 rounded-md flex flex-row justify-center items-center cursor-pointer'>
+      <VscCheck size={15} color='black' />
     </div>
   )
 }

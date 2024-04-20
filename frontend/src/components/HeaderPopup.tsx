@@ -23,7 +23,7 @@ const HeaderPopup = () => {
         {user?.email}
       </button>
       {isOpen && (
-        <div className='absolute z-1 right-25 mt-2 w-auto bg-white rounded-md shadow-xl border-2 border-slate-200 flex flex-col items-start text-lg'>
+        <div className='absolute z-20 right-25 mt-2 w-auto bg-white rounded-md shadow-xl border-2 border-slate-200 flex flex-col items-start text-lg'>
           <button
             onClick={() => navigate(`/uid/${user!.id}/manage-account`)}
             className='hover:bg-slate-200 w-full h-wull flex flex-row justify-start items-center px-3 py-2'

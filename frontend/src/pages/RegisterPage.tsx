@@ -45,7 +45,7 @@ const RegisterPage = () => {
         <form className='flex flex-col' onSubmit={handleSubmit(handleLogin)}>
           <input
             className='placeholder-gray-400 text-xl h-10 my-3 p-2 pb-3 focus:outline-none border-b-2 border-gray-200 focus:border-gray-500'
-            placeholder='Enter your name here'
+            placeholder='Your name'
             autoComplete='off'
             {...register('name')}
           />
@@ -56,7 +56,7 @@ const RegisterPage = () => {
           )}
           <input
             className='placeholder-gray-400 text-xl h-10 my-3 p-2 pb-3 focus:outline-none border-b-2 border-gray-200 focus:border-gray-500'
-            placeholder='Enter your surname here'
+            placeholder='Your surname'
             autoComplete='off'
             {...register('surname')}
           />
@@ -68,7 +68,7 @@ const RegisterPage = () => {
           <div className='flex flex-row justify-between items-center'>
             <input
               className='placeholder-gray-400 text-xl h-10 my-3 p-2 pb-3 focus:outline-none border-b-2 border-gray-200 focus:border-gray-500 w-full'
-              placeholder='Enter your email prefix here'
+              placeholder='Email prefix'
               autoComplete='off'
               {...register('email')}
             />
@@ -85,7 +85,7 @@ const RegisterPage = () => {
             <input
               className='placeholder-gray-400 text-xl h-10 my-3 p-2 pb-3 focus:outline-none border-b-2 border-gray-200 focus:border-gray-500 w-full'
               type={`${showPassword ? 'text' : 'password'}`}
-              placeholder='Enter your password here'
+              placeholder='Your password'
               autoComplete='off'
               {...register('password')}
             />

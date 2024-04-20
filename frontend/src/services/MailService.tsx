@@ -40,6 +40,28 @@ const sentApi = async (userId: string) => {
   }
 }
 
+const spamApi = async (userId: string) => {
+  try {
+    const response = await axios.get<LetterDataModel[]>(
+      `${baseApiUrl}/uid=${userId}/spam`
+    )
+    return response
+  } catch (error) {
+    handleError(error)
+  }
+}
+
+const binApi = async (userId: string) => {
+  try {
+    const response = await axios.get<LetterDataModel[]>(
+      `${baseApiUrl}/uid=${userId}/bin`
+    )
+    return response
+  } catch (error) {
+    handleError(error)
+  }
+}
+
 const letterApi = async (letterId: string) => {
   try {
     const response = await axios.get<LetterDataModel>(
@@ -79,12 +101,38 @@ const changeIsDeletedBySenderApi = async (letterId: string) => {
   }
 }
 
+const addToSpamApi = async (receiverId: string, senderId: string) => {
+  try {
+    await axios.post(`${baseApiUrl}/add-to-spam`, {
+      receiverId: receiverId,
+      senderId: senderId
+    })
+  } catch (error) {
+    handleError(error)
+  }
+}
+
+const removeFromSpamApi = async (receiverId: string, senderId: string) => {
+  try {
+    await axios.post(`${baseApiUrl}/remove-from-spam`, {
+      receiverId: receiverId,
+      senderId: senderId
+    })
+  } catch (error) {
+    handleError(error)
+  }
+}
+
 export {
   composeApi,
   inboxApi,
   sentApi,
+  binApi,
+  spamApi,
   letterApi,
   changeIsReadApi,
   changeIsDeletedByReceiverApi,
-  changeIsDeletedBySenderApi
+  changeIsDeletedBySenderApi,
+  addToSpamApi,
+  removeFromSpamApi
 }

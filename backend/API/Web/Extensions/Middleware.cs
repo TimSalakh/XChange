@@ -52,6 +52,7 @@ public static class Middleware
     {
         builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddScoped<ILetterRepository, LetterRepository>();
+        builder.Services.AddScoped<ISpamRepository, SpamRepository>();
         builder.Services.AddScoped<IAuthService, AuthService>();
         builder.Services.AddScoped<IMailService, MailService>();
         builder.Services.AddScoped<IUserService, UserService>();

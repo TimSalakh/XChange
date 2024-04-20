@@ -1,65 +1,84 @@
 import { useEffect, useState } from 'react'
-import { sentApi, changeIsDeletedBySenderApi } from '../services/MailService'
+import {
+  binApi,
+  changeIsDeletedBySenderApi,
+  changeIsDeletedByReceiverApi
+} from '../services/MailService'
 import { LetterDataModel } from '../models/LetterModels'
 import { handleError } from '../services/ErrorService'
-import SentLetterPreview from './SentLetterPreview'
+import BinLetterPreview from './BinLetterPreview'
 import { useAuth } from '../context/Context'
+import { VscDiscard } from 'react-icons/vsc'
 import { toast } from 'react-toastify'
-import { VscTrash } from 'react-icons/vsc'
 
-const Sent = () => {
-  const [sent, setSent] = useState<LetterDataModel[]>([])
+const Bin = () => {
+  const [bin, setBin] = useState<LetterDataModel[]>([])
   const { user } = useAuth()
   const [isBarActive, setIsBarActive] = useState<boolean>(false)
   const [letterId, setLetterId] = useState<string>('')
+  const [senderId, setSenderId] = useState<string>('')
+  const [receiverId, setReceiverId] = useState<string>('')
   const [searchText, setSearchText] = useState<string>('')
 
   useEffect(() => {
-    const fetchSent = async () => {
+    const fetchBin = async () => {
       try {
-        const response = await sentApi(user!.id)
-        setSent(response!.data)
+        const response = await binApi(user!.id)
+        setBin(response!.data)
       } catch (error) {
         handleError(error)
       }
     }
-    fetchSent()
+    fetchBin()
   }, [user])
 
-  const checkboxHandler = (isActive: boolean, letterId: string) => {
+  const checkboxHandler = (
+    isActive: boolean,
+    letterId: string,
+    senderId: string,
+    receiverId: string
+  ) => {
     setIsBarActive(isActive)
     setLetterId(letterId)
+    setSenderId(senderId)
+    setReceiverId(receiverId)
   }
 
-  const handleBinClick = async () => {
+  const handleRecoverCLick = async () => {
     try {
-      await changeIsDeletedBySenderApi(letterId)
-      await updateSent()
-      toast.success('Moved to bin.')
+      if (user?.id === senderId) {
+        await changeIsDeletedBySenderApi(letterId)
+        await updateBin()
+      } else if (user?.id === receiverId) {
+        await changeIsDeletedByReceiverApi(letterId)
+        await updateBin()
+      }
+      toast.success('Letter recovered.')
     } catch (error) {
       handleError(error)
     }
   }
 
-  const updateSent = async () => {
+  const updateBin = async () => {
     try {
-      const response = await sentApi(user!.id)
-      setSent(response!.data)
+      const response = await binApi(user!.id)
+      setBin(response!.data)
     } catch (error) {
       handleError(error)
     }
   }
 
-  const filteredSent = sent.filter(
+  const filtereBin = bin.filter(
     (letter) =>
       letter.subject.toLowerCase().includes(searchText.toLowerCase()) ||
       letter.body.toLowerCase().includes(searchText.toLowerCase()) ||
+      letter.sender.toLowerCase().includes(searchText.toLowerCase()) ||
       letter.receiver.toLowerCase().includes(searchText.toLowerCase())
   )
 
-  return sent.length === 0 ? (
+  return bin.length === 0 ? (
     <div className='h-full w-full font-medium text-4xl tracking-tight flex flex-row justify-center items-center text-slate-300'>
-      No sent letters
+      Bin is empty
     </div>
   ) : (
     <div className='overflow-y-auto max-h-[700px]'>
@@ -68,18 +87,18 @@ const Sent = () => {
           <td className='w-auto h-full flex flex-row justify-center items-center pl-2'>
             <button
               disabled={!isBarActive}
-              onClick={() => handleBinClick()}
+              onClick={() => handleRecoverCLick()}
               className={`flex flex-row justify-between items-center text-lg rounded-md px-3 py-0.5 ${
                 isBarActive
-                  ? 'bg-red-100 text-red-600 hover:bg-red-200 transition duration-100 ease-in-out'
+                  ? 'bg-green-100 text-green-600 hover:bg-green-200 transition duration-100 ease-in-out'
                   : ' bg-gray-100 text-gray-400'
               }`}
             >
-              Move to bin
-              <VscTrash
+              Recover
+              <VscDiscard
                 className='ml-2'
                 size={20}
-                color={`${isBarActive ? '#dc2626' : '#9ca3af'}`}
+                color={`${isBarActive ? '#16a34a' : '#9ca3af'}`}
               />
             </button>
           </td>
@@ -92,10 +111,12 @@ const Sent = () => {
             />
           </td>
         </thead>
-        {filteredSent.map((letter) => (
-          <SentLetterPreview
+        {filtereBin.map((letter) => (
+          <BinLetterPreview
             key={letter.id}
             letterId={letter.id}
+            senderId={letter.senderId}
+            sender={letter.sender}
             receiverId={letter.receiverId}
             receiver={letter.receiver}
             subject={letter.subject}
@@ -108,4 +129,4 @@ const Sent = () => {
   )
 }
 
-export default Sent
+export default Bin
