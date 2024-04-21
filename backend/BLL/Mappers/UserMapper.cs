@@ -17,10 +17,11 @@ public static class UserMapper
         };
     }
 
-    public static DataDto ToDataDto(this User user)
+    public static DisplayUserDto ToDisplayUserDto(this User user)
     {
-        return new DataDto
+        return new DisplayUserDto
         {
+            Id = user.Id,
             Name = user.Name,
             Surname = user.Surname,
             Email = user.Email!,

@@ -1,14 +1,14 @@
-import { UserDataModel } from '../models/UserModels'
+import { UserToStoreModel } from '../models/UserModels'
 import { LoginFormInputs, RegisterFormInputs } from '../models/FormInputsModels'
 import { createContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { loginApi, registerApi } from '../services/AuthService'
+import { loginApi, registerApi } from '../services/AccountService'
 import { toast } from 'react-toastify'
 import React from 'react'
 import axios, { AxiosResponse } from 'axios'
 
 type UserContextType = {
-  user: UserDataModel | null
+  user: UserToStoreModel | null
   registerUser: (inputs: RegisterFormInputs) => void
   loginUser: (inputs: LoginFormInputs) => void
   logout: () => void
@@ -23,12 +23,12 @@ const UserContext = createContext<UserContextType>({} as UserContextType)
 
 export const UserProvider = ({ children }: Props) => {
   const navigate = useNavigate()
-  const [user, setUser] = useState<UserDataModel | null>(null)
+  const [user, setUser] = useState<UserToStoreModel | null>(null)
   const [isLoaded, setIsLoaded] = useState<boolean>(false)
 
   useEffect(() => {
     const userDataString = localStorage.getItem('user')
-    const userData: UserDataModel = userDataString
+    const userData: UserToStoreModel = userDataString
       ? JSON.parse(userDataString)
       : {}
     if (userData) {
@@ -61,7 +61,7 @@ export const UserProvider = ({ children }: Props) => {
   }
 
   const handleResponse = (
-    response: AxiosResponse<UserDataModel, any>,
+    response: AxiosResponse<UserToStoreModel, any>,
     message: string
   ): void => {
     localStorage.setItem('user', JSON.stringify(response.data))

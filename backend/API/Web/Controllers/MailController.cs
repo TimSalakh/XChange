@@ -6,8 +6,9 @@ using API.BLL.DTOs.SpamSTOs;
 
 namespace Web.API.Web.Controllers;
 
+[Authorize]
 [ApiController]
-[Route("api/xchangemail")]
+[Route("api/mail")]
 public class MailController : Controller
 {
     private readonly IMailService _mailService;
@@ -17,7 +18,6 @@ public class MailController : Controller
         _mailService = letterService;
     }
 
-    [Authorize]
     [HttpPost("compose")]
     public async Task<IActionResult> Compose([FromBody] ComposeLetterDto composeLetterDto)
     {
@@ -32,71 +32,62 @@ public class MailController : Controller
         return Ok("Letter sent.");
     }
 
-    [Authorize]
-    [HttpGet("uid={uid:guid}/inbox")]
+    [HttpGet("user-id/{uid:guid}/inbox")]
     public async Task<IActionResult> LoadInbox([FromRoute] Guid uid)
     {
         var inbox = await _mailService.LoadInboxAsync(uid);
         return Ok(inbox);
     }
 
-    [Authorize]
-    [HttpGet("uid={uid:guid}/sent")]
+    [HttpGet("user-id/{uid:guid}/sent")]
     public async Task<IActionResult> LoadSent([FromRoute] Guid uid)
     {
         var sent = await _mailService.LoadSentAsync(uid);
         return Ok(sent);
     }
 
-    [Authorize]
-    [HttpGet("uid={uid:guid}/bin")]
-    public async Task<IActionResult> LoadBin([FromRoute] Guid uid)
-    {
-        var bin = await _mailService.LoadBinAsync(uid);
-        return Ok(bin);
-    }
-
-    [Authorize]
-    [HttpGet("uid={uid:guid}/spam")]
+    [HttpGet("user-id/{uid:guid}/spam")]
     public async Task<IActionResult> LoadSpam([FromRoute] Guid uid)
     {
         var spam = await _mailService.LoadSpamAsync(uid);
         return Ok(spam);
     }
 
-    [Authorize]
-    [HttpGet("letter={lid:guid}")]
+    [HttpGet("user-id/{uid:guid}/bin")]
+    public async Task<IActionResult> LoadBin([FromRoute] Guid uid)
+    {
+        var bin = await _mailService.LoadBinAsync(uid);
+        return Ok(bin);
+    }
+
+    [HttpGet("letter/{lid:guid}")]
     public async Task<IActionResult> LoadLetter([FromRoute] Guid lid)
     {
         var letter = await _mailService.LoadLetterAsync(lid);
         return Ok(letter);
     }
 
-    [Authorize]
-    [HttpGet("change-is-read-status/letter={lid:guid}")]
+    [HttpPut("letter/{lid:guid}/change-is-read")]
     public async Task<IActionResult> ChangeIsReadStatus([FromRoute] Guid lid)
     {
         await _mailService.ChangeIsReadAsync(lid);
         return Ok();
     }
 
-    [Authorize]
-    [HttpGet("change-is-deleted-by-receiver-status/letter={lid:guid}")]
+    [HttpPut("letter/{lid:guid}/change-is-deleted-by-receiver")]
     public async Task<IActionResult> ChangeIsDeletedByReceiverStatus([FromRoute] Guid lid)
     {
         await _mailService.ChangeIsDeletedByReceiverAsync(lid);
         return Ok();
     }
 
-    [Authorize]
-    [HttpGet("change-is-deleted-by-sender-status/letter={lid:guid}")]
+    [HttpPut("letter/{lid:guid}/change-is-deleted-by-sender")]
     public async Task<IActionResult> ChangeIsDeletedBySenderStatus([FromRoute] Guid lid)
     {
         await _mailService.ChangeIsDeletedBySenderAsync(lid);
         return Ok();
     }
 
-    [Authorize]
     [HttpPost("add-to-spam")]
     public async Task<IActionResult> AddToSpam([FromBody] SpamDto spamDto)
     {
@@ -104,7 +95,6 @@ public class MailController : Controller
         return Ok();
     }
 
-    [Authorize]
     [HttpPost("remove-from-spam")]
     public async Task<IActionResult> RemoveFromSpam([FromBody] SpamDto spamDto)
     {

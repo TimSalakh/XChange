@@ -3,7 +3,7 @@ import axios from 'axios'
 import { handleError } from './ErrorService'
 import { LetterDataModel } from '../models/LetterModels'
 
-const baseApiUrl = 'http://localhost:8888/api/xchangemail'
+const baseApiUrl = 'http://localhost:8888/api/mail'
 
 const composeApi = async (inputs: ComposeFormInputs, userId: string) => {
   try {
@@ -21,7 +21,7 @@ const composeApi = async (inputs: ComposeFormInputs, userId: string) => {
 const inboxApi = async (userId: string) => {
   try {
     const response = await axios.get<LetterDataModel[]>(
-      `${baseApiUrl}/uid=${userId}/inbox`
+      `${baseApiUrl}/user-id/${userId}/inbox`
     )
     return response
   } catch (error) {
@@ -32,7 +32,7 @@ const inboxApi = async (userId: string) => {
 const sentApi = async (userId: string) => {
   try {
     const response = await axios.get<LetterDataModel[]>(
-      `${baseApiUrl}/uid=${userId}/sent`
+      `${baseApiUrl}/user-id/${userId}/sent`
     )
     return response
   } catch (error) {
@@ -43,7 +43,7 @@ const sentApi = async (userId: string) => {
 const spamApi = async (userId: string) => {
   try {
     const response = await axios.get<LetterDataModel[]>(
-      `${baseApiUrl}/uid=${userId}/spam`
+      `${baseApiUrl}/user-id/${userId}/spam`
     )
     return response
   } catch (error) {
@@ -54,7 +54,7 @@ const spamApi = async (userId: string) => {
 const binApi = async (userId: string) => {
   try {
     const response = await axios.get<LetterDataModel[]>(
-      `${baseApiUrl}/uid=${userId}/bin`
+      `${baseApiUrl}/user-id/${userId}/bin`
     )
     return response
   } catch (error) {
@@ -65,7 +65,7 @@ const binApi = async (userId: string) => {
 const letterApi = async (letterId: string) => {
   try {
     const response = await axios.get<LetterDataModel>(
-      `${baseApiUrl}/letter=${letterId}`
+      `${baseApiUrl}/letter/${letterId}`
     )
     return response
   } catch (error) {
@@ -75,7 +75,7 @@ const letterApi = async (letterId: string) => {
 
 const changeIsReadApi = async (letterId: string) => {
   try {
-    await axios.get(`${baseApiUrl}/change-is-read-status/letter=${letterId}`)
+    await axios.put(`${baseApiUrl}/letter/${letterId}/change-is-read`)
   } catch (error) {
     handleError(error)
   }
@@ -83,8 +83,8 @@ const changeIsReadApi = async (letterId: string) => {
 
 const changeIsDeletedByReceiverApi = async (letterId: string) => {
   try {
-    await axios.get(
-      `${baseApiUrl}/change-is-deleted-by-receiver-status/letter=${letterId}`
+    await axios.put(
+      `${baseApiUrl}/letter/${letterId}/change-is-deleted-by-receiver`
     )
   } catch (error) {
     handleError(error)
@@ -93,8 +93,8 @@ const changeIsDeletedByReceiverApi = async (letterId: string) => {
 
 const changeIsDeletedBySenderApi = async (letterId: string) => {
   try {
-    await axios.get(
-      `${baseApiUrl}/change-is-deleted-by-sender-status/letter=${letterId}`
+    await axios.put(
+      `${baseApiUrl}/letter/${letterId}/change-is-deleted-by-sender`
     )
   } catch (error) {
     handleError(error)

@@ -1,6 +1,10 @@
-export type UserDataModel = {
+export type UserToStoreModel = {
   token: string
   id: string
+  email: string
+}
+
+export type UserDataModel = {
   email: string
   name: string
   surname: string

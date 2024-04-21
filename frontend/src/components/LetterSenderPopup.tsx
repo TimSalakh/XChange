@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { UserDataModel } from '../models/UserModels'
-import { userDataApi } from '../services/UserService'
+import { accountDataApi } from '../services/AccountService'
 import { handleError } from '../services/ErrorService'
 import { VscVerifiedFilled } from 'react-icons/vsc'
 
@@ -14,7 +14,7 @@ const LetterSenderPopup = ({ userId }: { userId: string | null }) => {
         return null
       }
       try {
-        const response = await userDataApi(userId!)
+        const response = await accountDataApi(userId!)
         if (response && response.data) {
           setUserData(response.data)
         }

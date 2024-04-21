@@ -53,10 +53,10 @@ const BinLetterPreview = (props: {
         onClick={() => handleLetterClick()}
       >
         <span>
-          <span className='italic mr-1 text-base'>from:</span> {sender}
+          <span className='italic mr-1 text-base w-auto'>from:</span> {sender}
         </span>
         <span className='ml-10'>
-          <span className='italic mr-1 text-base'>to:</span> {receiver}
+          <span className='italic mr-1 text-base w-auto'>to:</span> {receiver}
         </span>
       </td>
       <td
