@@ -21,7 +21,7 @@ const composeApi = async (inputs: ComposeFormInputs, userId: string) => {
 const inboxApi = async (userId: string) => {
   try {
     const response = await axios.get<LetterDataModel[]>(
-      `${baseApiUrl}/user-id/${userId}/inbox`
+      `${baseApiUrl}/user-id/${userId}/inbox/1/10`
     )
     return response
   } catch (error) {
@@ -32,7 +32,7 @@ const inboxApi = async (userId: string) => {
 const sentApi = async (userId: string) => {
   try {
     const response = await axios.get<LetterDataModel[]>(
-      `${baseApiUrl}/user-id/${userId}/sent`
+      `${baseApiUrl}/user-id/${userId}/sent/1/10`
     )
     return response
   } catch (error) {
@@ -43,7 +43,7 @@ const sentApi = async (userId: string) => {
 const spamApi = async (userId: string) => {
   try {
     const response = await axios.get<LetterDataModel[]>(
-      `${baseApiUrl}/user-id/${userId}/spam`
+      `${baseApiUrl}/user-id/${userId}/spam/1/10`
     )
     return response
   } catch (error) {
@@ -54,7 +54,7 @@ const spamApi = async (userId: string) => {
 const binApi = async (userId: string) => {
   try {
     const response = await axios.get<LetterDataModel[]>(
-      `${baseApiUrl}/user-id/${userId}/bin`
+      `${baseApiUrl}/user-id/${userId}/bin/1/10`
     )
     return response
   } catch (error) {

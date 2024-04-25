@@ -51,18 +51,24 @@ builder.Services.AddScoped<ISpamRepository, SpamRepository>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IMailService, MailService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<ICacheService, CacheService>();
 
+builder.Services.AddCors();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddMemoryCache();
 
 var app = builder.Build();
 
-app.UseCors(x => x
-     .AllowAnyMethod()
-     .AllowAnyHeader()
-     .AllowCredentials()
-     .SetIsOriginAllowed(origin => true));
+app.UseCors(builder =>
+{
+    builder
+        .AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .SetIsOriginAllowed(origin => true);
+});
 
 app.UseHttpsRedirection();
 app.UseAuthentication();

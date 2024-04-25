@@ -7,6 +7,9 @@ using API.BLL.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using API.BLL.DTOs.SpamSTOs;
 using API.DAL.Entities;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using API.BLL.Helpers;
+using System.Linq;
 
 namespace API.BLL.Services.Implementations;
 
@@ -16,17 +19,20 @@ public class MailService : IMailService
     private readonly IUserRepository _userRepository;
     private readonly UserManager<User> _userManager;    
     private readonly ISpamRepository _spamRepository;
+    private readonly ICacheService _cacheService;
 
     public MailService(
         ILetterRepository letterRepository,
         IUserRepository userRepository,
          UserManager<User> userManager,
-         ISpamRepository spamRepository)
+         ISpamRepository spamRepository,
+         ICacheService cacheService)
     {
         _letterRepository = letterRepository;
         _userRepository = userRepository;
         _userManager = userManager;
         _spamRepository = spamRepository;
+        _cacheService = cacheService;
     }
 
     public async Task<string> ComposeAsync(ComposeLetterDto composeLetterDto)
@@ -40,71 +46,88 @@ public class MailService : IMailService
         return string.Empty;
     }
 
-    public async Task<IEnumerable<DisplayLetterDto>> LoadInboxAsync(Guid userId)
+    public async Task<IEnumerable<DisplayLetterDto>> LoadInboxAsync(CacheKey cacheKey)
     {
-        var user = await _userRepository.GetByIdAsync(userId);
+        IQueryable<DisplayLetterDto>? inbox = (IQueryable<DisplayLetterDto>?)_cacheService.Get(cacheKey);
+
+        if (inbox != null)
+            return inbox;
+
+        var user = await _userRepository.GetByIdAsync(cacheKey.UserId);
         IQueryable<Letter> letters = await _letterRepository.GetAllAsync();
         IQueryable<Spam> spams = await _spamRepository.GetAllAsync();
 
         var spammers = spams
-            .Where(s => s.ReceiverId == userId)
+            .Where(s => s.ReceiverId == cacheKey.UserId)
             .Select(s => s.SenderId);
 
-        var received = letters
-            .Where(l => l.ReceiverId == userId && !l.IsDeletedByReceiver && !spammers.Contains(l.SenderId))
+        inbox = letters
+            .Where(l => l.ReceiverId == cacheKey.UserId && !l.IsDeletedByReceiver && !spammers.Contains(l.SenderId))
             .Include(l => l.Sender)
             .Include(l => l.Receiver)
-            .OrderByDescending(l => l.Date)
+            .OrderByDescending(l => l.Date)   
+            .Skip((cacheKey.Page - 1) * cacheKey.PageSize)
+            .Take(cacheKey.PageSize)
             .Select(l => l.ToDisplayLetterDto());
 
-        return received;
+        _cacheService.Set(cacheKey, inbox);
+
+        return inbox;
     }
 
-    public async Task<IEnumerable<DisplayLetterDto>> LoadSentAsync(Guid userId)
+    public async Task<IEnumerable<DisplayLetterDto>> LoadSentAsync(CacheKey cacheKey)
     {
-        var user = await _userRepository.GetByIdAsync(userId);
+        var user = await _userRepository.GetByIdAsync(cacheKey.UserId);
         IQueryable<Letter> letters = await _letterRepository.GetAllAsync();
 
         var sent = letters
-            .Where(l => l.SenderId == userId && !l.IsDeletedBySender)
+            .Where(l => l.SenderId == cacheKey.UserId && !l.IsDeletedBySender)
             .Include(l => l.Sender)
             .Include(l => l.Receiver)
             .OrderByDescending(l => l.Date)
+            .Skip((cacheKey.Page - 1) * cacheKey.PageSize)
+            .Take(cacheKey.PageSize)
             .Select(l => l.ToDisplayLetterDto());
 
         return sent;
     }
 
-    public async Task<IEnumerable<DisplayLetterDto>> LoadBinAsync(Guid userId)
+    public async Task<IEnumerable<DisplayLetterDto>> LoadBinAsync(CacheKey cacheKey)
     {
-        var user = await _userRepository.GetByIdAsync(userId);
+        var user = await _userRepository.GetByIdAsync(cacheKey.UserId);
         IQueryable<Letter> letters = await _letterRepository.GetAllAsync();
 
         var bin = letters
             .Where(l => 
-            (l.SenderId == userId || l.ReceiverId == userId)
+            (l.SenderId == cacheKey.UserId || l.ReceiverId == cacheKey.UserId)
             && (l.IsDeletedByReceiver || l.IsDeletedBySender))
             .Include(l => l.Sender)
             .Include(l => l.Receiver)
+            .OrderByDescending(l => l.Date)
+            .Skip((cacheKey.Page - 1) * cacheKey.PageSize)
+            .Take(cacheKey.PageSize)
             .Select(l => l.ToDisplayLetterDto());
 
         return bin;
     }
 
-    public async Task<IEnumerable<DisplayLetterDto>> LoadSpamAsync(Guid userId)
+    public async Task<IEnumerable<DisplayLetterDto>> LoadSpamAsync(CacheKey cacheKey)
     {
-        var user = await _userRepository.GetByIdAsync(userId);
+        var user = await _userRepository.GetByIdAsync(cacheKey.UserId);
         IQueryable<Spam> spams = await _spamRepository.GetAllAsync();
         IQueryable<Letter> letters = await _letterRepository.GetAllAsync();
 
         var spammers = spams
-            .Where(s => s.ReceiverId == userId)
+            .Where(s => s.ReceiverId == cacheKey.UserId)
             .Select(s => s.SenderId);
 
         var spam = letters
-            .Where(l => spammers.Contains(l.SenderId))
+            .Where(l => l.ReceiverId == cacheKey.UserId && spammers.Contains(l.SenderId))
             .Include(l => l.Sender)
             .Include(l => l.Receiver)
+            .OrderByDescending(l => l.Date)
+            .Skip((cacheKey.Page - 1) * cacheKey.PageSize)
+            .Take(cacheKey.PageSize)
             .Select(l => l.ToDisplayLetterDto());
             
         return spam;
