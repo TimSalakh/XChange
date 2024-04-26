@@ -3,8 +3,6 @@ using API.BLL.DTOs.LetterDTOs;
 using API.BLL.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using API.BLL.DTOs.SpamSTOs;
-using API.DAL.Entities;
-using API.BLL.Helpers;
 
 namespace Web.API.Web.Controllers;
 
@@ -34,21 +32,10 @@ public class MailController : Controller
         return Ok("Letter sent.");
     }
 
-    [HttpGet("user-id/{uid:guid}/inbox/{page:int}/{pageSize:int}")]
-    public async Task<IActionResult> LoadInbox(
-        [FromRoute] Guid uid, 
-        [FromRoute] int page, 
-        [FromRoute] int pageSize)
+    [HttpGet("user-id/{userId:guid}/inbox")]
+    public async Task<IActionResult> LoadInbox([FromRoute] Guid userId)
     {
-        var cacheKey = new CacheKey
-        {
-            Option = MailServiceOptions.Inbox,
-            UserId = uid,
-            Page = page,
-            PageSize = pageSize
-        };
-
-        var inbox = await _mailService.LoadInboxAsync(cacheKey);
+        var inbox = await _mailService.LoadInboxAsync(userId);
 
         if (inbox == null)
             return NotFound();
@@ -56,21 +43,10 @@ public class MailController : Controller
         return Ok(inbox);
     }
 
-    [HttpGet("user-id/{uid:guid}/sent/{page:int}/{pageSize:int}")]
-    public async Task<IActionResult> LoadSent(
-        [FromRoute] Guid uid,
-        [FromRoute] int page,
-        [FromRoute] int pageSize)
+    [HttpGet("user-id/{userId:guid}/sent")]
+    public async Task<IActionResult> LoadSent([FromRoute] Guid userId)
     {
-        var cacheKey = new CacheKey
-        {
-            Option = MailServiceOptions.Sent,
-            UserId = uid,
-            Page = page,
-            PageSize = pageSize
-        };
-
-        var sent = await _mailService.LoadSentAsync(cacheKey);
+        var sent = await _mailService.LoadSentAsync(userId);
 
         if (sent == null)
             return NotFound();
@@ -78,21 +54,10 @@ public class MailController : Controller
         return Ok(sent);
     }
 
-    [HttpGet("user-id/{uid:guid}/spam/{page:int}/{pageSize:int}")]
-    public async Task<IActionResult> LoadSpam(
-        [FromRoute] Guid uid,
-        [FromRoute] int page,
-        [FromRoute] int pageSize)
+    [HttpGet("user-id/{userId:guid}/spam")]
+    public async Task<IActionResult> LoadSpam([FromRoute] Guid userId)
     {
-        var cacheKey = new CacheKey
-        {
-            Option = MailServiceOptions.Spam,
-            UserId = uid,
-            Page = page,
-            PageSize = pageSize
-        };
-
-        var spam = await _mailService.LoadSpamAsync(cacheKey);
+        var spam = await _mailService.LoadSpamAsync(userId);
 
         if (spam == null)
             return NotFound();
@@ -100,21 +65,10 @@ public class MailController : Controller
         return Ok(spam);
     }
 
-    [HttpGet("user-id/{uid:guid}/bin/{page:int}/{pageSize:int}")]
-    public async Task<IActionResult> LoadBin(
-        [FromRoute] Guid uid,
-        [FromRoute] int page,
-        [FromRoute] int pageSize)
+    [HttpGet("user-id/{userId:guid}/bin")]
+    public async Task<IActionResult> LoadBin([FromRoute] Guid userId)
     {
-        var cacheKey = new CacheKey
-        {
-            Option = MailServiceOptions.Bin,
-            UserId = uid,
-            Page = page,
-            PageSize = pageSize
-        };
-
-        var bin = await _mailService.LoadBinAsync(cacheKey);
+        var bin = await _mailService.LoadBinAsync(userId);
 
         if (bin == null)
             return NotFound();
@@ -122,31 +76,31 @@ public class MailController : Controller
         return Ok(bin);
     }
 
-    [HttpGet("letter/{lid:guid}")]
-    public async Task<IActionResult> LoadLetter([FromRoute] Guid lid)
+    [HttpGet("letter/{letterId:guid}")]
+    public async Task<IActionResult> LoadLetter([FromRoute] Guid letterId)
     {
-        var letter = await _mailService.LoadLetterAsync(lid);
+        var letter = await _mailService.LoadLetterAsync(letterId);
         return Ok(letter);
     }
 
-    [HttpPut("letter/{lid:guid}/change-is-read")]
-    public async Task<IActionResult> ChangeIsReadStatus([FromRoute] Guid lid)
+    [HttpPut("letter/{letterId:guid}/change-is-read")]
+    public async Task<IActionResult> ChangeIsReadStatus([FromRoute] Guid letterId)
     {
-        await _mailService.ChangeIsReadAsync(lid);
+        await _mailService.ChangeIsReadAsync(letterId);
         return Ok();
     }
 
-    [HttpPut("letter/{lid:guid}/change-is-deleted-by-receiver")]
-    public async Task<IActionResult> ChangeIsDeletedByReceiverStatus([FromRoute] Guid lid)
+    [HttpPut("letter/{letterId:guid}/change-is-deleted-by-receiver")]
+    public async Task<IActionResult> ChangeIsDeletedByReceiverStatus([FromRoute] Guid letterId)
     {
-        await _mailService.ChangeIsDeletedByReceiverAsync(lid);
+        await _mailService.ChangeIsDeletedByReceiverAsync(letterId);
         return Ok();
     }
 
-    [HttpPut("letter/{lid:guid}/change-is-deleted-by-sender")]
-    public async Task<IActionResult> ChangeIsDeletedBySenderStatus([FromRoute] Guid lid)
+    [HttpPut("letter/{letterId:guid}/change-is-deleted-by-sender")]
+    public async Task<IActionResult> ChangeIsDeletedBySenderStatus([FromRoute] Guid letterId)
     {
-        await _mailService.ChangeIsDeletedBySenderAsync(lid);
+        await _mailService.ChangeIsDeletedBySenderAsync(letterId);
         return Ok();
     }
 
