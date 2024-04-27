@@ -38,7 +38,7 @@ public class AccountController : Controller
 
     [Authorize]
     [HttpGet("{email}/account-exist")]
-    public async Task<IActionResult> DoesUserExist([FromRoute] string email)
+    public async Task<IActionResult> DoesUserExist(string email)
     {
         var result = await _accountService.DoesAccountExistAsync(email);
         return result ? Ok() : NotFound();
@@ -46,7 +46,7 @@ public class AccountController : Controller
 
     [Authorize]
     [HttpGet("{id:guid}/data")]
-    public async Task<IActionResult> LoadUserData([FromRoute] Guid id)
+    public async Task<IActionResult> LoadUserData(Guid id)
     {
         var user = await _accountService.LoadAccountData(id);
         return user == null ? NotFound() : Ok(user);

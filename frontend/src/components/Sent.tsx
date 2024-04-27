@@ -5,7 +5,7 @@ import { handleError } from '../services/ErrorService'
 import SentLetterPreview from './SentLetterPreview'
 import { useAuth } from '../context/Context'
 import { toast } from 'react-toastify'
-import { VscTrash } from 'react-icons/vsc'
+import { VscTrash, VscSettings } from 'react-icons/vsc'
 
 const Sent = () => {
   const [sent, setSent] = useState<LetterDataModel[]>([])
@@ -13,11 +13,12 @@ const Sent = () => {
   const [isBarActive, setIsBarActive] = useState<boolean>(false)
   const [letterId, setLetterId] = useState<string>('')
   const [searchText, setSearchText] = useState<string>('')
+  const [isOpen, setIsOpen] = useState<boolean>(false)
 
   useEffect(() => {
     const fetchSent = async () => {
       try {
-        const response = await sentApi(user!.id)
+        const response = await sentApi(user!.id, 'new')
         setSent(response!.data)
       } catch (error) {
         handleError(error)
@@ -34,16 +35,16 @@ const Sent = () => {
   const handleBinClick = async () => {
     try {
       await changeIsDeletedBySenderApi(letterId)
-      await updateSent()
+      await updateSent('new')
       toast.success('Moved to bin.')
     } catch (error) {
       handleError(error)
     }
   }
 
-  const updateSent = async () => {
+  const updateSent = async (option: string) => {
     try {
-      const response = await sentApi(user!.id)
+      const response = await sentApi(user!.id, option)
       setSent(response!.data)
     } catch (error) {
       handleError(error)
@@ -83,14 +84,42 @@ const Sent = () => {
               />
             </button>
           </td>
-          <td className='h-full w-3/12 px-2 py-1.5'>
-            <input
-              placeholder='Search'
-              className='h-full w-full focus:outline-none focus:border-slate-300 rounded-md border-2 border-slate-200 px-2 text-lg'
-              value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
-            />
-          </td>
+          <div className='h-full w-4/12 flex flex-row justify-end pr-2'>
+            <td className='h-full w-auto px-2 py-1.5'>
+              <input
+                placeholder='Search'
+                className='h-full w-full focus:outline-none focus:border-slate-300 rounded-md border-2 border-slate-200 px-2 text-lg'
+                value={searchText}
+                onChange={(e) => setSearchText(e.target.value)}
+              />
+            </td>
+            <td className='h-full w-12 flex flex-row justify-center items-center p-1.5'>
+              <button
+                onClick={() => {
+                  setIsOpen(!isOpen)
+                }}
+                className='h-full w-full flex flex-row justify-center items-center rounded-md hover:bg-slate-200 transition duration-100 ease-in-out'
+              >
+                <VscSettings size={25} color='gray' />
+                {isOpen && (
+                  <div className='absolute z-20 top-9 right-6 mt-2 w-auto bg-white rounded-md shadow-xl border-2 border-slate-200 flex flex-col items-start text-lg'>
+                    <button
+                      onClick={() => updateSent('new')}
+                      className='hover:bg-slate-200 w-full h-wull flex flex-row justify-start items-center px-3 py-1'
+                    >
+                      New first
+                    </button>
+                    <button
+                      onClick={() => updateSent('old')}
+                      className='hover:bg-slate-200 w-full h-wull flex flex-row justify-start items-center px-3 py-1'
+                    >
+                      Old first
+                    </button>
+                  </div>
+                )}
+              </button>
+            </td>
+          </div>
         </thead>
         {filteredSent.map((letter) => (
           <SentLetterPreview

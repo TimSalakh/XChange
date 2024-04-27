@@ -7,6 +7,7 @@ using API.BLL.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using API.BLL.DTOs.SpamSTOs;
 using API.DAL.Entities;
+using System.Linq.Expressions;
 
 namespace API.BLL.Services.Implementations;
 
@@ -16,17 +17,20 @@ public class MailService : IMailService
     private readonly IUserRepository _userRepository;
     private readonly UserManager<User> _userManager;    
     private readonly ISpamRepository _spamRepository;
+    private readonly IQueryService _queryService;
 
     public MailService(
         ILetterRepository letterRepository,
         IUserRepository userRepository,
          UserManager<User> userManager,
-         ISpamRepository spamRepository)
+         ISpamRepository spamRepository,
+         IQueryService queryService)
     {
         _letterRepository = letterRepository;
         _userRepository = userRepository;
         _userManager = userManager;
         _spamRepository = spamRepository;
+        _queryService = queryService;
     }
 
     public async Task<string> ComposeAsync(ComposeLetterDto composeLetterDto)
@@ -40,76 +44,72 @@ public class MailService : IMailService
         return string.Empty;
     }
 
-    public async Task<IEnumerable<DisplayLetterDto>> LoadInboxAsync(Guid userId)
+    public async Task<IEnumerable<DisplayLetterDto>?> LoadInboxAsync(Guid userId, string option)
     {
-        var user = await _userRepository.GetByIdAsync(userId);
-        IQueryable<Letter> letters = await _letterRepository.GetAllAsync();
-        IQueryable<Spam> spams = await _spamRepository.GetAllAsync();
+        var spammers = await _queryService.GetUsersSpammersAsync(userId);
+        var (optionalFilter, orderBy) = _queryService.DefineOption(option); 
 
-        var spammers = spams
-            .Where(s => s.ReceiverId == userId)
-            .Select(s => s.SenderId);
+        var inboxFilters = new List<Expression<Func<Letter, bool>>>
+        {
+            l => l.ReceiverId == userId, 
+            l => !l.IsDeletedByReceiver,
+            l => !spammers!.Contains(l.SenderId)
+        };
 
-        var inbox = letters
-            .Where(l => l.ReceiverId == userId && !l.IsDeletedByReceiver && !spammers.Contains(l.SenderId))
-            .Include(l => l.Sender)
-            .Include(l => l.Receiver)
-            .OrderByDescending(l => l.Date)   
-            .Select(l => l.ToDisplayLetterDto());
+        if (optionalFilter != null)
+            inboxFilters.Add(optionalFilter);
 
-        return inbox;
+        return await _queryService.GetUsersLettersAsync(inboxFilters, orderBy);
     }
 
-    public async Task<IEnumerable<DisplayLetterDto>> LoadSentAsync(Guid userId)
+    public async Task<IEnumerable<DisplayLetterDto>?> LoadSentAsync(Guid userId, string option)
     {
-        var user = await _userRepository.GetByIdAsync(userId);
-        IQueryable<Letter> letters = await _letterRepository.GetAllAsync();
+        var (optionalFilter, orderBy) = _queryService.DefineOption(option);
 
-        var sent = letters
-            .Where(l => l.SenderId == userId && !l.IsDeletedBySender)
-            .Include(l => l.Sender)
-            .Include(l => l.Receiver)
-            .OrderByDescending(l => l.Date)
-            .Select(l => l.ToDisplayLetterDto());
+        var sentFilters = new List<Expression<Func<Letter, bool>>>
+        {
+            l => l.SenderId == userId,
+            l => !l.IsDeletedBySender,
+        };
 
-        return sent;
+        if (optionalFilter != null)
+            sentFilters.Add(optionalFilter);
+
+        return await _queryService.GetUsersLettersAsync(sentFilters, orderBy);
     }
 
-    public async Task<IEnumerable<DisplayLetterDto>> LoadBinAsync(Guid userId)
+    public async Task<IEnumerable<DisplayLetterDto>?> LoadBinAsync(Guid userId, string option)
     {
-        var user = await _userRepository.GetByIdAsync(userId);
-        IQueryable<Letter> letters = await _letterRepository.GetAllAsync();
+        var (optionalFilter, orderBy) = _queryService.DefineOption(option);
 
-        var bin = letters
-            .Where(l => 
-            (l.SenderId == userId || l.ReceiverId == userId)
-            && (l.IsDeletedByReceiver || l.IsDeletedBySender))
-            .Include(l => l.Sender)
-            .Include(l => l.Receiver)
-            .OrderByDescending(l => l.Date)
-            .Select(l => l.ToDisplayLetterDto());
+        var binFilters = new List<Expression<Func<Letter, bool>>>
+        {
+            l => l.SenderId == userId || l.ReceiverId == userId,
+            l => l.IsDeletedByReceiver || l.IsDeletedBySender
+        };
 
-        return bin;
+        if (optionalFilter != null)
+            binFilters.Add(optionalFilter);
+
+        return await _queryService.GetUsersLettersAsync(binFilters, orderBy);
     }
 
-    public async Task<IEnumerable<DisplayLetterDto>> LoadSpamAsync(Guid userId)
+    public async Task<IEnumerable<DisplayLetterDto>?> LoadSpamAsync(Guid userId, string option)
     {
-        var user = await _userRepository.GetByIdAsync(userId);
-        IQueryable<Spam> spams = await _spamRepository.GetAllAsync();
-        IQueryable<Letter> letters = await _letterRepository.GetAllAsync();
+        var spammers = await _queryService.GetUsersSpammersAsync(userId);
+        var (optionalFilter, orderBy) = _queryService.DefineOption(option);
 
-        var spammers = spams
-            .Where(s => s.ReceiverId == userId)
-            .Select(s => s.SenderId);
+        var spamFilters = new List<Expression<Func<Letter, bool>>>
+        {
+            l => l.ReceiverId == userId,
+            l => !l.IsDeletedByReceiver,
+            l => spammers!.Contains(l.SenderId)
+        };
 
-        var spam = letters
-            .Where(l => l.ReceiverId == userId && spammers.Contains(l.SenderId))
-            .Include(l => l.Sender)
-            .Include(l => l.Receiver)
-            .OrderByDescending(l => l.Date)
-            .Select(l => l.ToDisplayLetterDto());
-            
-        return spam;
+        if (optionalFilter != null)
+            spamFilters.Add(optionalFilter);
+
+        return await _queryService.GetUsersLettersAsync(spamFilters, orderBy);
     }
 
     public async Task<DisplayLetterDto> LoadLetterAsync(Guid letterId)

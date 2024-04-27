@@ -53,6 +53,7 @@ builder.Services.AddScoped<ISpamRepository, SpamRepository>();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IMailService, MailService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IQueryService, QueryService>();
 
 builder.Services.AddCors();
 builder.Services.AddSwaggerGen();

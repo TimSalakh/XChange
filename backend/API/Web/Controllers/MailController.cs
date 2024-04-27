@@ -32,73 +32,57 @@ public class MailController : Controller
         return Ok("Letter sent.");
     }
 
-    [HttpGet("user-id/{userId:guid}/inbox")]
-    public async Task<IActionResult> LoadInbox([FromRoute] Guid userId)
+    [HttpGet("user-id/{userId:guid}/inbox/{option}")]
+    public async Task<IActionResult> LoadInbox(Guid userId, string option)
     {
-        var inbox = await _mailService.LoadInboxAsync(userId);
-
-        if (inbox == null)
-            return NotFound();
-
+        var inbox = await _mailService.LoadInboxAsync(userId, option);
         return Ok(inbox);
     }
 
-    [HttpGet("user-id/{userId:guid}/sent")]
-    public async Task<IActionResult> LoadSent([FromRoute] Guid userId)
+    [HttpGet("user-id/{userId:guid}/sent/{option}")]
+    public async Task<IActionResult> LoadSent(Guid userId, string option)
     {
-        var sent = await _mailService.LoadSentAsync(userId);
-
-        if (sent == null)
-            return NotFound();
-
+        var sent = await _mailService.LoadSentAsync(userId, option);
         return Ok(sent);
     }
 
-    [HttpGet("user-id/{userId:guid}/spam")]
-    public async Task<IActionResult> LoadSpam([FromRoute] Guid userId)
+    [HttpGet("user-id/{userId:guid}/spam/{option}")]
+    public async Task<IActionResult> LoadSpam(Guid userId, string option)
     {
-        var spam = await _mailService.LoadSpamAsync(userId);
-
-        if (spam == null)
-            return NotFound();
-
+        var spam = await _mailService.LoadSpamAsync(userId, option);
         return Ok(spam);
     }
 
-    [HttpGet("user-id/{userId:guid}/bin")]
-    public async Task<IActionResult> LoadBin([FromRoute] Guid userId)
+    [HttpGet("user-id/{userId:guid}/bin/{option}")]
+    public async Task<IActionResult> LoadBin(Guid userId, string option)
     {
-        var bin = await _mailService.LoadBinAsync(userId);
-
-        if (bin == null)
-            return NotFound();
-
+        var bin = await _mailService.LoadBinAsync(userId, option);
         return Ok(bin);
     }
 
     [HttpGet("letter/{letterId:guid}")]
-    public async Task<IActionResult> LoadLetter([FromRoute] Guid letterId)
+    public async Task<IActionResult> LoadLetter(Guid letterId)
     {
         var letter = await _mailService.LoadLetterAsync(letterId);
         return Ok(letter);
     }
 
     [HttpPut("letter/{letterId:guid}/change-is-read")]
-    public async Task<IActionResult> ChangeIsReadStatus([FromRoute] Guid letterId)
+    public async Task<IActionResult> ChangeIsReadStatus(Guid letterId)
     {
         await _mailService.ChangeIsReadAsync(letterId);
         return Ok();
     }
 
     [HttpPut("letter/{letterId:guid}/change-is-deleted-by-receiver")]
-    public async Task<IActionResult> ChangeIsDeletedByReceiverStatus([FromRoute] Guid letterId)
+    public async Task<IActionResult> ChangeIsDeletedByReceiverStatus(Guid letterId)
     {
         await _mailService.ChangeIsDeletedByReceiverAsync(letterId);
         return Ok();
     }
 
     [HttpPut("letter/{letterId:guid}/change-is-deleted-by-sender")]
-    public async Task<IActionResult> ChangeIsDeletedBySenderStatus([FromRoute] Guid letterId)
+    public async Task<IActionResult> ChangeIsDeletedBySenderStatus(Guid letterId)
     {
         await _mailService.ChangeIsDeletedBySenderAsync(letterId);
         return Ok();

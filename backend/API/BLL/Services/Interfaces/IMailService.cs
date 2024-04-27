@@ -6,10 +6,10 @@ namespace API.BLL.Services.Interfaces;
 public interface IMailService
 {
     Task<string> ComposeAsync(ComposeLetterDto composeLetterDto);
-    Task<IEnumerable<DisplayLetterDto>> LoadInboxAsync(Guid userId);
-    Task<IEnumerable<DisplayLetterDto>> LoadSentAsync(Guid userId);
-    Task<IEnumerable<DisplayLetterDto>> LoadBinAsync(Guid userId);
-    Task<IEnumerable<DisplayLetterDto>> LoadSpamAsync(Guid userId);
+    Task<IEnumerable<DisplayLetterDto>?> LoadInboxAsync(Guid userId, string option);
+    Task<IEnumerable<DisplayLetterDto>?> LoadSentAsync(Guid userId, string option);
+    Task<IEnumerable<DisplayLetterDto>?> LoadBinAsync(Guid userId, string option);
+    Task<IEnumerable<DisplayLetterDto>?> LoadSpamAsync(Guid userId, string option);
     Task<DisplayLetterDto> LoadLetterAsync(Guid letterId);
     Task ChangeIsReadAsync(Guid letterId);
     Task ChangeIsDeletedByReceiverAsync(Guid letterId);
